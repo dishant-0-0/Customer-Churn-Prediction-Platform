@@ -1,8 +1,10 @@
 data:
-  raw_path: data/raw
-  processed_path: data/processed
-  interim_path: data/interim
+  raw_path: data/raw/customer_churn.csv
+  processed_path: data/processed/
 
 model:
-  random_state: 42
   test_size: 0.2
+  random_state: 42
+
+artifacts:
+  model_path: artifacts/model.pkl
