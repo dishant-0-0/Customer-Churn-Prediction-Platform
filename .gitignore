@@ -1,15 +1,65 @@
+# ---Python environment---
 venv/
+env/
+.venv/
 __pycache__/
 *.pyc
+*.py[cod]
+*$py.class
 
+
+# ---Python build/package files---
+*.egg-info/
+.eggs/
+build/
+dist/
+PKG-INFO
+SOURCES.txt
+dependency_links.txt
+top_level.txt
+
+
+# ---Environment variables---
 .env
+.env.*
 
+
+# ---Data files---
 data/raw/*
 data/interim/*
 data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
 
+
+# ---ML artifacts---
 artifacts/*
+models/*.pkl
+*.pkl
+*.joblib
 
+
+# ---Logs---
+logs/
+*.log
+
+
+# ---MLflow---
 mlruns/
+mlartifacts/
 
+
+# ---Jupyter---
 .ipynb_checkpoints/
+
+
+# ---IDE---
+.vscode/
+.idea/
+
+
+# ---Testing---
+.pytest_cache/
+.coverage
+htmlcov/
