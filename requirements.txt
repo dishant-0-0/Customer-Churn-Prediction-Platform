@@ -12,3 +12,4 @@ pyyaml
 joblib
 pytest
 shap
+ipykernel
