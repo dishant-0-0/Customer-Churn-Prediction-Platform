@@ -1,8 +1,13 @@
 data:
   raw_path: data/raw/customer_churn.csv
+  interim_file: data/interim/customer_churn_cleaned.csv
   processed_path: data/processed/
+  processed_file: data/processed/customer_churn_features.csv
+  train_path: data/processed/train.csv
+  test_path: data/processed/test.csv
 
 model:
+  target: Churn Value
   test_size: 0.2
   random_state: 42
 
