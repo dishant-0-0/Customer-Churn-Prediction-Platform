@@ -1,26 +1,39 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
-class ProjectConfig(BaseModel):
+class AppConfig(BaseModel):
+    model_config = ConfigDict(
+        frozen= True,
+        extra= "forbid"
+    )
+
+class ProjectConfig(AppConfig):
     name: str
     version: str
 
-class PathConfig(BaseModel):
-    config_file: str
+class FilesConfig(AppConfig):
     raw_file: str
     interim_file: str
     processed_file: str
 
-class DataConfig(BaseModel):
+class DataConfig(AppConfig):
     target: str
     test_size: float
     validation_size: float
     random_state: int
 
-class FeatureEngineeringConfig(BaseModel):
+class FeatureEngineeringConfig(AppConfig):
     high_value_threshold: float
 
-class TrainingConfig(BaseModel):
+class TrainingConfig(AppConfig):
     model: str
 
-class LoggingConfig(BaseModel):
+class LoggingConfig(AppConfig):
     level: str
+
+class Settings(AppConfig):
+    project: ProjectConfig
+    files: FilesConfig
+    data: DataConfig
+    feature_engineering: FeatureEngineeringConfig
+    training: TrainingConfig
+    logging: LoggingConfig

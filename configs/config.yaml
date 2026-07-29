@@ -2,8 +2,7 @@ project:
   name: customer-churn
   version: 1.0.0
 
-paths:
-  config_file: config.yaml
+files:
   raw_file: customer_churn.csv
   interim_file: customer_churn_cleaned.csv
   processed_file: customer_churn_features.csv
