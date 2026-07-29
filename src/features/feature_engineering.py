@@ -53,3 +53,29 @@ def drop_identifier_columns(df: pd.DataFrame) -> pd.DataFrame:
         columns= settings.feature_engineering.drop_columns,
         errors= "ignore"
     )
+
+def create_tenure_groups(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Create tenure groups from tenure months.
+
+    Parameters
+    ----------
+    df: pd.DataFrame (Input Dataframe)
+
+    Returns
+    -------
+    pd.DataFrame (Dataframe with the 'Tenure Group' feature)
+    """
+
+    logger.info("Creating tenure groups.")
+
+    df = df.copy()
+
+    df["Tenure Group"] = pd.cut(
+        df["Tenure Months"],
+        bins = settings.feature_engineering.tenure_bins,
+        labels = settings.feature_engineering.tenure_labels,
+        include_lowest = True
+    )
+
+    return df
