@@ -18,8 +18,8 @@ from src.config.config import settings
 def split_data(
     df: pd.DataFrame,
     target: str,
-    test_size: float = settings["data"]["test_size"],
-    random_state: int = settings["data"]["random_state"]
+    test_size: float = settings.data.test_size,
+    random_state: int = settings.data.random_state
 ) -> Tuple:
     """
     Split dataframe into train and test sets
