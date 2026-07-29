@@ -22,7 +22,12 @@ class DataConfig(AppConfig):
     random_state: int
 
 class FeatureEngineeringConfig(AppConfig):
-    high_value_threshold: float
+    required_columns: list[str]
+    drop_columns: list[str]
+    drop_location_columns: list[str]
+    tenure_bins: list[int]
+    tenure_labels: list[str]
+    high_value_strategy: str
 
 class TrainingConfig(AppConfig):
     model: str

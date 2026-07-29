@@ -14,7 +14,38 @@ data:
   random_state: 42
 
 feature_engineering:
-  high_value_threshold: 100
+  required_columns:
+  - Tenure Months
+  - Total Charges
+  - CLTV
+  
+  drop_columns:
+  - CustomerID
+  - Count
+  - Churn Label
+  - Churn Score
+  - Churn Reason
+
+  drop_location_columns:
+  - Zip Code
+  - Lat Long
+  - Latitude
+  - Longitude
+  - Country
+  - State
+
+  tenure_bins:
+  - 0
+  - 12
+  - 36
+  - 72
+
+  tenure_labels:
+  - New
+  - Medium
+  - Loyal
+
+  high_value_strategy: Median
 
 training:
   model: xgboost
