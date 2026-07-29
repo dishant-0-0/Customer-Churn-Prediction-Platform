@@ -12,13 +12,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
+from src.config.config import settings
 
 
 def split_data(
     df: pd.DataFrame,
     target: str,
-    test_size: float = 0.2,
-    random_state: int = 42
+    test_size: float = settings["data"]["test_size"],
+    random_state: int = settings["data"]["random_state"]
 ) -> Tuple:
     """
     Split dataframe into train and test sets
@@ -36,8 +37,8 @@ def split_data(
     )
 
 
-def get_features_types(
-        X: pd.DataFrame,
+def get_feature_types(
+    X: pd.DataFrame,
 ):
     """
     Return numerical and categorical feature lists.
@@ -52,3 +53,57 @@ def get_features_types(
     ).columns.tolist()
 
     return numerical_cols, categorical_cols
+
+
+def build_preprocessor(
+    numerical_cols,
+    categorical_cols
+):
+    """
+    Create preprocessing pipeline
+    """
+
+    numeric_pipeline = Pipeline(
+        steps=[
+            (
+                "imputer",
+                SimpleImputer(strategy="median")
+            ),
+            (
+                "scaler",
+                StandardScaler()
+            ),
+        ]
+    )
+
+    categorical_pipeline = Pipeline(
+        steps=[
+            (
+                "imputer",
+                SimpleImputer(strategy="most_frequent")
+            ),
+            (
+                "encoder",
+                OneHotEncoder(
+                    handle_unknown="ignore"
+                ),
+            ),
+        ]
+    )
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            (
+                "numerical",
+                numeric_pipeline,
+                numerical_cols,
+            ),
+            (
+                "categorical",
+                categorical_pipeline,
+                categorical_cols,
+            ),
+        ]
+    )
+
+    return preprocessor

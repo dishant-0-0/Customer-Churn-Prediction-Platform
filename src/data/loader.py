@@ -7,17 +7,21 @@ from the data directory.
 
 from pathlib import Path
 import logging
-
 import pandas as pd
-
+from src.config.paths import (
+    RAW_DATA_DIR,
+    INTERIM_DATA_DIR,
+    PROCESSED_DATA_DIR
+)
 
 logger = logging.getLogger(__name__)
 
 
-# Project root
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-
-DATA_DIR = PROJECT_ROOT / "data"
+DATA_STAGE_MAP = {
+    "raw" : RAW_DATA_DIR,
+    "interim" : INTERIM_DATA_DIR,
+    "processed" : PROCESSED_DATA_DIR
+}
 
 def load_data(stage: str, filename: str) -> pd.DataFrame:
     """
@@ -40,7 +44,7 @@ def load_data(stage: str, filename: str) -> pd.DataFrame:
         Loaded dataset.
     """
 
-    filepath = DATA_DIR / stage / filename
+    filepath = DATA_STAGE_MAP[stage] / filename
 
     if not filepath.exists():
         raise FileNotFoundError(

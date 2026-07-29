@@ -13,3 +13,4 @@ joblib
 pytest
 shap
 ipykernel
+pydantic>=2.0
