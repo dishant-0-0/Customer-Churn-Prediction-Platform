@@ -5,6 +5,7 @@ This module provides reusable functions for loading datasets
 from the data directory.
 """
 
+from __future__ import annotations
 from pathlib import Path
 import pandas as pd
 from src.utils.logger import get_logger
@@ -58,8 +59,44 @@ def load_data(stage: str, filename: str, **kwargs) -> pd.DataFrame:
 
     logger.info("Loading data from '%s'.",filepath)
 
-    df = pd.read_csv(filepath)
+    df = pd.read_csv(filepath,**kwargs)
 
     logger.info("Loaded dataset with shape %s", df.shape)
 
     return df
+
+def save_data(
+    df: pd.DataFrame,
+    stage: str,
+    filename: str,
+    **kwargs
+) -> None:
+    """
+    Save a dataframe to the specified data stage.
+
+    Parameters
+    ----------
+    df: pd.DataFrame (Dataframe to save)
+    stage: str (One of raw, interim, processed)
+    filename: str (Output csv filename)
+    """
+
+    if stage not in DATA_STAGE_MAP:
+        raise ValueError(
+            f"Invalid stage: {stage}."
+            f"Expected stages: {list(DATA_STAGE_MAP)}."
+        )
+
+    filepath = DATA_STAGE_MAP[stage] / filename
+
+    logger.info("Saving dataset to '%s'.",filepath)
+
+    filepath.parent.mkdir(parents= True, exist_ok= True)
+    
+    df.to_csv(
+        filepath,
+        index= False,
+        **kwargs
+    )
+
+    logger.info("Successfully saved dataset with shape %s.", df.shape)
