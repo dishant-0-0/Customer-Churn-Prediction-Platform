@@ -6,24 +6,23 @@ from the data directory.
 """
 
 from pathlib import Path
-import logging
 import pandas as pd
+from src.utils.logger import get_logger
 from src.config.paths import (
     RAW_DATA_DIR,
     INTERIM_DATA_DIR,
     PROCESSED_DATA_DIR
 )
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
-
-DATA_STAGE_MAP = {
+DATA_STAGE_MAP : dict[str, Path] = {
     "raw" : RAW_DATA_DIR,
     "interim" : INTERIM_DATA_DIR,
     "processed" : PROCESSED_DATA_DIR
 }
 
-def load_data(stage: str, filename: str) -> pd.DataFrame:
+def load_data(stage: str, filename: str, **kwargs) -> pd.DataFrame:
     """
     Load a dataset from the specified data stage.
     
@@ -44,6 +43,14 @@ def load_data(stage: str, filename: str) -> pd.DataFrame:
         Loaded dataset.
     """
 
+    logger.info("Loading data from '%s'.",filepath)
+
+    if stage not in DATA_STAGE_MAP:
+        raise ValueError(
+            f"Invalid stage: {stage}."
+            f"Expected stages: {list(DATA_STAGE_MAP)}."
+            )
+
     filepath = DATA_STAGE_MAP[stage] / filename
 
     if not filepath.exists():
@@ -51,6 +58,8 @@ def load_data(stage: str, filename: str) -> pd.DataFrame:
             f"Dataset not found: {filepath}"
         )
 
-    logger.info("Loading dataset from %s", filepath)
+    df = pd.read_csv(filepath)
 
-    return pd.read_csv(filepath)
+    logger.info("Loaded dataset with shape %s", df.shape)
+
+    return df
