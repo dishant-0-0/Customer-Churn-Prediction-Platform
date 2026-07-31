@@ -2,7 +2,7 @@
 Data preprocessing utilities
 """
 
-from typing import Tuple
+from __future__ import annotations
 from src.utils.logger import get_logger
 import pandas as pd
 from src.core.entities import ProcessedData
@@ -21,10 +21,21 @@ def split_data(
     target: str,
     test_size: float | None = None,
     random_state: int | None = None  
-) -> Tuple:
+) -> tuple[
+    pd.DataFrame,
+    pd.DataFrame,
+    pd.Series,
+    pd.Series
+]:
     """
     Split dataframe into train and test sets
     """
+
+    if df.empty:
+        raise ValueError("Input dataframe is empty.")
+
+    if target not in df.columns:
+        raise ValueError(f"Target column '{target}' not found.")
 
     logger.info("Splitting dataset into train and test sets.")
 
@@ -47,10 +58,16 @@ def split_data(
 
 def get_feature_types(
     X: pd.DataFrame,
-):
+) -> tuple[
+    list[str],
+    list[str]
+]:
     """
     Return numerical and categorical feature lists.
     """
+
+    if X.empty:
+        raise ValueError("Input dataframe is empty.")
 
     numerical_cols = X.select_dtypes(
         include=["int64", "float64"]
@@ -70,12 +87,14 @@ def get_feature_types(
 
 
 def build_preprocessor(
-    numerical_cols,
-    categorical_cols
-):
+    numerical_cols: list[str],
+    categorical_cols: list[str]
+) -> ColumnTransformer:
     """
     Create preprocessing pipeline
     """
+
+    logger.info("Building preprocessing pipeline.")
 
     numeric_pipeline = Pipeline(
         steps=[
@@ -105,7 +124,7 @@ def build_preprocessor(
         ]
     )
 
-    preprocessor = ColumnTransformer(
+    return ColumnTransformer(
         transformers=[
             (
                 "numerical",
@@ -119,5 +138,3 @@ def build_preprocessor(
             ),
         ]
     )
-
-    return preprocessor
