@@ -43,8 +43,6 @@ def load_data(stage: str, filename: str, **kwargs) -> pd.DataFrame:
         Loaded dataset.
     """
 
-    logger.info("Loading data from '%s'.",filepath)
-
     if stage not in DATA_STAGE_MAP:
         raise ValueError(
             f"Invalid stage: {stage}."
@@ -57,6 +55,8 @@ def load_data(stage: str, filename: str, **kwargs) -> pd.DataFrame:
         raise FileNotFoundError(
             f"Dataset not found: {filepath}"
         )
+
+    logger.info("Loading data from '%s'.",filepath)
 
     df = pd.read_csv(filepath)
 
