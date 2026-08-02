@@ -89,7 +89,3 @@ def prepare_training_data() -> ProcessedData:
         numerical_columns= numerical_cols,
         categorical_columns= categorical_cols
     )
-
-processed_data = prepare_training_data()
-print(processed_data.X_train_processed.shape)
-print(processed_data.feature_names[:10])

@@ -1,4 +1,5 @@
 from pydantic import BaseModel, ConfigDict
+from typing import Any
 
 class AppConfig(BaseModel):
     model_config = ConfigDict(
@@ -29,11 +30,17 @@ class FeatureEngineeringConfig(AppConfig):
     tenure_labels: list[str]
     high_value_strategy: str
 
+class ModelConfig(AppConfig):
+    name: str
+    params: dict[str, Any] = {}
+
 class TrainingConfig(AppConfig):
-    model: str
+    model: ModelConfig
 
 class LoggingConfig(AppConfig):
     level: str
+    file: str
+    console: bool
 
 class Settings(AppConfig):
     project: ProjectConfig
