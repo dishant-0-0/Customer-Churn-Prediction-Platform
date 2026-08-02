@@ -12,18 +12,6 @@ logger = get_logger(__name__)
 def validate_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
     Validate the input dataframe before feature engineering.
-
-    Parameters
-    ----------
-    df: pd.DataFrame (Input Dataframe)
-
-    Returns
-    -------
-    pd.DataFrame (Validated Dataframe)
-
-    Raises
-    ------
-    ValueError (If the dataframe is empty or missing required columns)
     """
 
     if df.empty:
@@ -31,7 +19,11 @@ def validate_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     required_columns = settings.feature_engineering.required_columns
 
-    missing = set(required_columns) - set(df.columns)
+    missing = [
+        column
+        for column in required_columns
+        if column not in df.columns
+    ]
 
     if missing:
         raise ValueError(
@@ -54,20 +46,12 @@ def drop_identifier_columns(df: pd.DataFrame) -> pd.DataFrame:
         errors= "ignore"
     )
 
-def create_tenure_groups(df: pd.DataFrame) -> pd.DataFrame:
+def create_tenure_group(df: pd.DataFrame) -> pd.DataFrame:
     """
     Create tenure groups from tenure months.
-
-    Parameters
-    ----------
-    df: pd.DataFrame (Input Dataframe)
-
-    Returns
-    -------
-    pd.DataFrame (Dataframe with the 'Tenure Group' feature)
     """
 
-    logger.info("Creating tenure groups.")
+    logger.info("Creating 'Tenure Group' feature.")
 
     df = df.copy()
 
@@ -85,7 +69,7 @@ def create_avg_monthly_spend(df: pd.DataFrame) -> pd.DataFrame:
     Create average monthly spend feature.
     """
 
-    logger.info("Creating average monthly spend feature.")
+    logger.info("Creating 'Avg Monthly Spend' feature.")
 
     df = df.copy()
 
@@ -101,13 +85,13 @@ def create_high_value_customer(df: pd.DataFrame) -> pd.DataFrame:
     Create high-value customer indicator.
     """
 
-    logger.info("Creating high-value customer feature.")
+    logger.info("Creating 'High Value Customer' feature.")
 
     df = df.copy()
 
     strategy = settings.feature_engineering.high_value_strategy
     if strategy == "median":
-        threshold = df["CLTV"].meadian()
+        threshold = df["CLTV"].median()
     else:
         raise ValueError(
             f"Unsupported strategy: {strategy}"
@@ -140,7 +124,7 @@ def feature_engineering_pipeline(df: pd.DataFrame) -> pd.DataFrame:
 
     df = validate_dataframe(df)
     df = drop_identifier_columns(df)
-    df = create_tenure_groups(df)
+    df = create_tenure_group(df)
     df = create_avg_monthly_spend(df)
     df = create_high_value_customer(df)
     df = drop_location_columns(df)
