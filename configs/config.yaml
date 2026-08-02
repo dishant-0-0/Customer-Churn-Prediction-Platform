@@ -45,7 +45,7 @@ feature_engineering:
   - Medium
   - Loyal
 
-  high_value_strategy: Median
+  high_value_strategy: median
 
 training:
   model: xgboost

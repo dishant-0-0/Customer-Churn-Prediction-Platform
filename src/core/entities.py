@@ -15,10 +15,16 @@ class ProcessedData:
 
     Attributes
     ----------
-    X_train : np.ndarray
+    X_train : pd.DataFrame
+        Training features before preprocessing.
+    
+    X_test : pd.DataFrame
+        Testing features before preprocessing.
+
+    X_train_processed : np.ndarray
         Processed training features.
     
-    X_test : np.ndarray
+    X_test_processed : np.ndarray
         Processed testing features.
     
     y_train: pd.Series
@@ -29,15 +35,29 @@ class ProcessedData:
 
     preprocessor: ColumnTransformer
         Fitted preprocessing pipeline.
+
+    feature_names: list[str]
+        List of feature names after preprocessing.
+
+    numerical_columns: list[str]
+        List of numerical feature names.
+
+    categorical_columns: list[str]
+        List of categorical feature names.
     """
 
-    X_train: np.ndarray
-    X_test: np.ndarray
+    X_train: pd.DataFrame
+    X_test: pd.DataFrame
+
+    X_train_processed: np.ndarray
+    X_test_processed: np.ndarray
 
     y_train: pd.Series
     y_test: pd.Series
 
     preprocessor: ColumnTransformer
+
+    feature_names: list[str]
 
     numerical_columns: list[str]
     categorical_columns: list[str]
