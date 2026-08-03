@@ -37,6 +37,9 @@ class ModelConfig(AppConfig):
 class TrainingConfig(AppConfig):
     model: ModelConfig
 
+class EvaluationConfig(AppConfig):
+    threshold: float
+
 class LoggingConfig(AppConfig):
     level: str
     file: str
@@ -49,3 +52,4 @@ class Settings(AppConfig):
     feature_engineering: FeatureEngineeringConfig
     training: TrainingConfig
     logging: LoggingConfig
+    evaluation: EvaluationConfig

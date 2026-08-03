@@ -61,3 +61,60 @@ class ProcessedData:
 
     numerical_columns: list[str]
     categorical_columns: list[str]
+
+
+@dataclass(frozen=True, slots=True)
+class EvaluationResult:
+    """
+    Container for model evaluation results.
+    
+    Attributes
+    ----------
+    y_pred : np.ndarray
+        Predicted class labels.
+    
+    y_prob: np.ndarray
+        Predicted probabilities for the positive class.
+
+    accuracy: float
+        Accuracy score.
+
+    precision: float
+        Precision score.
+
+    recall: float
+        Recall score.
+
+    f1: float
+        F1 score.
+
+    roc_auc: float
+        ROC-AUC score.
+
+    confusion_matrix: np.ndarray
+        Confusion matrix.
+
+    fpr: np.ndarray
+        False positive rates for ROC curve.
+
+    tpr: np.ndarray
+        True positive rates for ROC curve.
+
+    thresholds: np.ndarray
+        Decision thresholds for ROC curve.
+    """
+
+    y_pred: np.ndarray
+    y_prob: np.ndarray
+
+    accuracy: float
+    precision: float
+    recall: float
+    f1: float
+    roc_auc: float
+
+    confusion_matrix: np.ndarray
+
+    fpr: np.ndarray
+    tpr: np.ndarray
+    thresholds: np.ndarray

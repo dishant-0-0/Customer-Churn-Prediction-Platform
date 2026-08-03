@@ -1,3 +1,6 @@
-from .entities import ProcessedData
+from .entities import ProcessedData, EvaluationResult
 
-__all__ = ["ProcessedData"]
+__all__ = [
+    "ProcessedData",
+    "EvaluationResult"
+    ]
