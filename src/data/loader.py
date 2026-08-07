@@ -26,22 +26,6 @@ DATA_STAGE_MAP : dict[str, Path] = {
 def load_data(stage: str, filename: str, **kwargs) -> pd.DataFrame:
     """
     Load a dataset from the specified data stage.
-    
-    Parameters
-    ----------
-    stage : str
-        One of:
-        - raw
-        - interim
-        - processed
-
-    filename : str
-        CSV filename
-
-    Returns
-    -------
-    pd.DataFrame
-        Loaded dataset.
     """
 
     if stage not in DATA_STAGE_MAP:
@@ -73,12 +57,6 @@ def save_data(
 ) -> None:
     """
     Save a dataframe to the specified data stage.
-
-    Parameters
-    ----------
-    df: pd.DataFrame (Dataframe to save)
-    stage: str (One of raw, interim, processed)
-    filename: str (Output csv filename)
     """
 
     if stage not in DATA_STAGE_MAP:
