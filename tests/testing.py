@@ -1,6 +1,7 @@
 from src.models.registry import get_model
 from src.models.train import train_model
 from src.models.evaluate import evaluate_model
+from src.models.predict import predict
 from src.pipelines.training_pipeline import prepare_training_data
 
 processed_data = prepare_training_data()
@@ -17,9 +18,12 @@ results = evaluate_model(
     model= trained_model
 )
 
+predictions = predict(
+    model = model,
+    preprocessor= processed_data.preprocessor,
+    X = processed_data.X_test
+)
+
 print(results.accuracy)
-print(results.precision)
 print(results.recall)
-print(results.f1)
-print(results.roc_auc)
-print(results.confusion_matrix)
+print(predictions[:5])
