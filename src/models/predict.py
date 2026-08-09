@@ -6,6 +6,7 @@ from __future__ import annotations
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.compose import ColumnTransformer
+from src.config.config import settings
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -20,23 +21,6 @@ def _prepare_features(
 
     return preprocessor.transform(X)
 
-def predict(
-    model: BaseEstimator,
-    preprocessor: ColumnTransformer,
-    X: pd.DataFrame,
-):
-    """
-    Generate predictions for unseen data.
-    """
-
-    logger.info("Generating predictions using %s", model.__class__.__name__)
-
-    X_processed = _prepare_features(
-        preprocessor=preprocessor,
-        X= X
-    )
-
-    return model.predict(X_processed)
 
 def predict_proba(
     model: BaseEstimator,
@@ -63,3 +47,23 @@ def predict_proba(
     return model.predict_proba(
         X_processed
     )[:,1]
+
+
+def predict(
+    model: BaseEstimator,
+    preprocessor: ColumnTransformer,
+    X: pd.DataFrame,
+):
+    """
+    Generate predictions for unseen data.
+    """
+
+    logger.info("Generating predictions using %s", model.__class__.__name__)
+
+    probabilities = predict_proba(
+        model= model,
+        preprocessor= preprocessor,
+        X=X
+    )
+
+    return (probabilities >= settings.evaluation.threshold).astype(int)

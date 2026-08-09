@@ -9,6 +9,7 @@ import pandas as pd
 from pathlib import Path
 from sklearn.compose import ColumnTransformer
 from sklearn.base import BaseEstimator
+from src.persistence import InferenceArtifacts
 
 @dataclass(frozen=True, slots=True)
 class ProcessedData:
@@ -130,4 +131,5 @@ class TrainingResult:
 
     model: BaseEstimator
     evaluation: EvaluationResult
+    artifacts: InferenceArtifacts
     artifacts_path: Path

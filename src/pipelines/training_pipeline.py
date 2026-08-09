@@ -131,5 +131,6 @@ def run_training_pipeline() -> TrainingResult:
     return TrainingResult(
         model=model,
         evaluation= evaluation,
+        artifacts= artifacts,
         artifacts_path= artifacts_path
     )
