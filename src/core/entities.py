@@ -6,7 +6,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from sklearn.compose import ColumnTransformer
+from sklearn.base import BaseEstimator
 
 @dataclass(frozen=True, slots=True)
 class ProcessedData:
@@ -118,3 +120,14 @@ class EvaluationResult:
     fpr: np.ndarray
     tpr: np.ndarray
     thresholds: np.ndarray
+
+
+@dataclass(frozen=True, slots= True)
+class TrainingResult:
+    """
+    Output of the complete training workflow.
+    """
+
+    model: BaseEstimator
+    evaluation: EvaluationResult
+    artifacts_path: Path

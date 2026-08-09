@@ -1,6 +1,7 @@
-from .entities import ProcessedData, EvaluationResult
+from .entities import ProcessedData, EvaluationResult, TrainingResult
 
 __all__ = [
     "ProcessedData",
-    "EvaluationResult"
+    "EvaluationResult",
+    "TrainingResult"
     ]

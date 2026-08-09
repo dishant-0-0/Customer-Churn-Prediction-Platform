@@ -15,6 +15,7 @@ class FilesConfig(AppConfig):
     raw_file: str
     interim_file: str
     processed_file: str
+    config_file: str
 
 class DataConfig(AppConfig):
     target: str
@@ -45,6 +46,9 @@ class LoggingConfig(AppConfig):
     file: str
     console: bool
 
+class ArtifactsConfig(AppConfig):
+    version: str
+
 class Settings(AppConfig):
     project: ProjectConfig
     files: FilesConfig
@@ -53,3 +57,4 @@ class Settings(AppConfig):
     training: TrainingConfig
     logging: LoggingConfig
     evaluation: EvaluationConfig
+    artifacts: ArtifactsConfig

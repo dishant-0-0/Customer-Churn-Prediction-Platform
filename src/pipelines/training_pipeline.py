@@ -5,7 +5,13 @@ Training data preparation pipeline.
 from __future__ import annotations
 import pandas as pd
 from src.config.config import settings
-from src.core import ProcessedData
+from src.models.registry import get_model
+from src.models.train import train_model
+from src.models.evaluate import evaluate_model
+from src.core import (
+    ProcessedData,
+    TrainingResult
+    )
 from src.data.loader import load_data
 from src.data.preprocessing import (
     build_preprocessor,
@@ -13,6 +19,8 @@ from src.data.preprocessing import (
     split_data
 )
 from src.features.feature_engineering import feature_engineering_pipeline
+from src.persistence import InferenceArtifacts
+from src.persistence.save import save_artifacts
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -88,4 +96,40 @@ def prepare_training_data() -> ProcessedData:
         feature_names= feature_names,
         numerical_columns= numerical_cols,
         categorical_columns= categorical_cols
+    )
+
+
+def run_training_pipeline() -> TrainingResult:
+    """
+    Run training pipeline and save artifacts.
+    """
+
+    processed = prepare_training_data()
+
+    model = get_model()
+
+    model = train_model(
+        processed,
+        model
+    )
+
+    evaluation = evaluate_model(
+        processed,
+        model
+    )
+
+    artifacts = InferenceArtifacts(
+        model= model,
+        preprocessor= processed.preprocessor,
+        feature_names= processed.feature_names
+    )
+
+    artifacts_path = save_artifacts(
+        artifacts
+    )
+
+    return TrainingResult(
+        model=model,
+        evaluation= evaluation,
+        artifacts_path= artifacts_path
     )
