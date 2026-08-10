@@ -8,6 +8,10 @@ import seaborn as sns
 from matplotlib.figure import Figure
 from src.config.config import settings
 from src.core import EvaluationResult
+from src.visualization._utils import (
+    create_figure,
+    finalize_figure
+)
 
 def create_confusion_matrix(
     evaluation: EvaluationResult
@@ -16,14 +20,7 @@ def create_confusion_matrix(
     Create a confusion matrix figure.
     """
 
-    plt.style.use(settings.visualization.style)
-
-    fig, ax = plt.subplots(
-        figsize=(
-            settings.visualization.figsize.width,
-            settings.visualization.figsize.height
-        )
-    )
+    fig, ax = create_figure()
 
     sns.heatmap(
         evaluation.confusion_matrix,
@@ -53,6 +50,4 @@ def create_confusion_matrix(
         labelsize = settings.visualization.font.tick_size
     )
 
-    fig.tight_layout()
-
-    return fig
+    return finalize_figure(fig= fig)
