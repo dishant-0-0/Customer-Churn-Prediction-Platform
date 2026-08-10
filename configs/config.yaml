@@ -71,3 +71,31 @@ logging:
 
 artifacts:
   version: v1
+
+visualization:
+  style: seaborn-v0_8
+  dpi: 150
+  
+  figsize:
+    width: 6 
+    height: 5
+  
+  font:
+    title_size: 14
+    label_size: 12
+    tick_size: 10
+
+  confusion_matrix:
+    cmap: Blues
+    annot: true
+  
+  roc_curve:
+    color: "#1f77b4"
+    linewidth: 2
+
+  feature_importance:
+    top_n: 20
+    color: "#1f77b4"
+
+  shap:
+    max_display: 20

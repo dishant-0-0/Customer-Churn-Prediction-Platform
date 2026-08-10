@@ -1,16 +1,10 @@
-from src.pipelines.training_pipeline import prepare_training_data
-from src.pipelines.inference_pipeline import run_inference
+from src.pipelines.training_pipeline import run_training_pipeline
+import matplotlib.pyplot as plt
+from src.visualization import create_confusion_matrix
 
-processed = prepare_training_data()
-
-predictions_noproba = run_inference(
-    processed.X_test.head(10)
+result = run_training_pipeline()
+fig = create_confusion_matrix(
+    result.evaluation
 )
 
-predictions_proba = run_inference(
-    processed.X_test.head(10),
-    return_probabilities= True
-)
-
-print(predictions_noproba)
-print(predictions_proba)
+plt.show()

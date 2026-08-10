@@ -49,6 +49,40 @@ class LoggingConfig(AppConfig):
 class ArtifactsConfig(AppConfig):
     version: str
 
+class FigureSizeConfig(AppConfig):
+    width: int
+    height: int
+
+class FontConfig(AppConfig):
+    title_size: int
+    label_size: int
+    tick_size: int
+
+class ConfusionMatrixConfig(AppConfig):
+    cmap: str
+    annot: bool
+
+class RocCurveConfig(AppConfig):
+    color: str
+    linewidth: int
+
+class FeatureImportanceConfig(AppConfig):
+    top_n: int
+    color: str
+
+class ShapConfig(AppConfig):
+    max_display: int
+
+class VisualizationConfig(AppConfig):
+    style: str
+    dpi:int
+    figsize: FigureSizeConfig
+    font: FontConfig
+    confusion_matrix: ConfusionMatrixConfig
+    roc_curve: RocCurveConfig
+    feature_importance: FeatureImportanceConfig
+    shap: ShapConfig
+
 class Settings(AppConfig):
     project: ProjectConfig
     files: FilesConfig
@@ -58,3 +92,4 @@ class Settings(AppConfig):
     logging: LoggingConfig
     evaluation: EvaluationConfig
     artifacts: ArtifactsConfig
+    visualization: VisualizationConfig
