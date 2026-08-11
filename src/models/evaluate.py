@@ -65,5 +65,5 @@ def evaluate_model(
         confusion_matrix= cm,
         fpr=fpr,
         tpr=tpr,
-        thresholds= thresholds
+        roc_thresholds= thresholds
     )

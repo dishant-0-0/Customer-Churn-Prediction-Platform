@@ -103,7 +103,7 @@ class EvaluationResult:
     tpr: np.ndarray
         True positive rates for ROC curve.
 
-    thresholds: np.ndarray
+    roc_thresholds: np.ndarray
         Decision thresholds for ROC curve.
     """
 
@@ -120,7 +120,7 @@ class EvaluationResult:
 
     fpr: np.ndarray
     tpr: np.ndarray
-    thresholds: np.ndarray
+    roc_thresholds: np.ndarray
 
 
 @dataclass(frozen=True, slots= True)
