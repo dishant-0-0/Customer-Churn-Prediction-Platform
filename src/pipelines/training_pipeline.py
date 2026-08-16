@@ -99,7 +99,9 @@ def prepare_training_data() -> ProcessedData:
     )
 
 
-def run_training_pipeline() -> TrainingResult:
+def run_training_pipeline(
+    force: bool =False
+) -> TrainingResult:
     """
     Run training pipeline and save artifacts.
     """
@@ -125,7 +127,8 @@ def run_training_pipeline() -> TrainingResult:
     )
 
     artifacts_path = save_artifacts(
-        artifacts
+        artifacts,
+        force = force
     )
 
     return TrainingResult(

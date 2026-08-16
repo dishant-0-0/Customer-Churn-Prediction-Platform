@@ -122,6 +122,11 @@ class EvaluationResult:
     tpr: np.ndarray
     roc_thresholds: np.ndarray
 
+    average_precision: float
+    precision_curve: np.ndarray
+    recall_curve: np.ndarray
+    pr_thresholds: np.ndarray
+
 
 @dataclass(frozen=True, slots= True)
 class TrainingResult:

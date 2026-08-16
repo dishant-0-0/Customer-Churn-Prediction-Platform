@@ -17,6 +17,7 @@ logger = get_logger(__name__)
 
 def save_artifacts(
     artifacts: InferenceArtifacts,
+    force: bool = False
 ) -> Path:
     """
     Save deployment artifacts.
@@ -29,6 +30,11 @@ def save_artifacts(
     experiment_dir = ARTIFACTS_DIR / experiment_name
 
     if experiment_dir.exists():
+        if force:
+            logger.warning(
+                f"Overwriting existing experiment: '{experiment_name}'"
+            )
+            shutil.rmtree(experiment_dir)
         raise FileExistsError(
             f"Experiment '{experiment_name}' already exists."
         )

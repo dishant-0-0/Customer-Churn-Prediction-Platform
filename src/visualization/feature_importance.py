@@ -1,11 +1,14 @@
 """Reusable charts for interpreting trained models."""
 
 from collections.abc import Sequence
-
+from src.visualization._utils import(
+    create_figure,
+    finalize_figure
+)
 import matplotlib.pyplot as plt
 
 
-def plot_feature_importance(model, feature_names: Sequence[str], top_n: int = 20):
+def create_feature_importance(model, feature_names: Sequence[str], top_n: int = 20):
     """Plot the most important features exposed by a fitted tree-based model.
 
     Returns the matplotlib axes containing the chart.
@@ -30,13 +33,13 @@ def plot_feature_importance(model, feature_names: Sequence[str], top_n: int = 20
     )[:top_n]
 
     names, importances = zip(*ranked_features)
-    figure, axes = plt.subplots(figsize=(10, 8))
+
+    fig, axes = create_figure()
+
     axes.barh(names, importances)
     axes.invert_yaxis()
     axes.set_xlabel("Feature Importance")
     axes.set_ylabel("Feature")
     axes.set_title(f"Top {len(ranked_features)} Important Features")
-    figure.tight_layout()
-    plt.show()
 
-    return axes
+    return finalize_figure(fig)

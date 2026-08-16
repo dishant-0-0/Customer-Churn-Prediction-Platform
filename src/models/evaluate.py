@@ -11,7 +11,9 @@ from sklearn.metrics import (
     f1_score,
     recall_score,
     roc_auc_score,
-    roc_curve
+    roc_curve,
+    average_precision_score,
+    precision_recall_curve
 )
 from src.config.config import settings
 from src.core import ProcessedData, EvaluationResult
@@ -52,6 +54,10 @@ def evaluate_model(
 
     fpr, tpr, thresholds = roc_curve(processed.y_test, y_prob)
 
+    average_precision = average_precision_score(processed.y_test,y_prob)
+
+    precision_curve, recall_curve, pr_thresholds = (precision_recall_curve(processed.y_test, y_pred))
+
     logger.info("Evaluation completed successfully.")
 
     return EvaluationResult(
@@ -65,5 +71,9 @@ def evaluate_model(
         confusion_matrix= cm,
         fpr=fpr,
         tpr=tpr,
-        roc_thresholds= thresholds
+        roc_thresholds= thresholds,
+        precision_curve=precision_curve,
+        recall_curve=recall_curve,
+        average_precision= average_precision,
+        pr_thresholds=pr_thresholds
     )
