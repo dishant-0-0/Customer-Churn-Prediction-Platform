@@ -4,6 +4,7 @@ Data models used throughout the ML pipeline.
 
 from __future__ import annotations
 from dataclasses import dataclass
+from typing import Any
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -138,3 +139,13 @@ class TrainingResult:
     evaluation: EvaluationResult
     artifacts: InferenceArtifacts
     artifacts_path: Path
+
+
+@dataclass(frozen=True, slots=True)
+class ExplainabilityResult:
+    """
+    Explainability artifacts produced for a trained model.
+    """
+
+    explanation: Any
+    feature_names: list[str]

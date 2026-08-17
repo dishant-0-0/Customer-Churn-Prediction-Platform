@@ -6,6 +6,7 @@ from src.visualization._utils import(
     finalize_figure
 )
 import matplotlib.pyplot as plt
+from src.utils.feature_names import clean_feature_names
 
 
 def create_feature_importance(model, feature_names: Sequence[str], top_n: int = 20):

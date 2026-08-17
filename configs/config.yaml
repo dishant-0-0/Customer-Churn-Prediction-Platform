@@ -35,6 +35,7 @@ feature_engineering:
   - Longitude
   - Country
   - State
+  - City
 
   tenure_bins:
   - 0

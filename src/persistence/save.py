@@ -35,9 +35,10 @@ def save_artifacts(
                 f"Overwriting existing experiment: '{experiment_name}'"
             )
             shutil.rmtree(experiment_dir)
-        raise FileExistsError(
-            f"Experiment '{experiment_name}' already exists."
-        )
+        else: 
+            raise FileExistsError(
+                f"Experiment '{experiment_name}' already exists."
+            )
 
     model_dir = experiment_dir / "model"
     metrics_dir = experiment_dir / "metrics"

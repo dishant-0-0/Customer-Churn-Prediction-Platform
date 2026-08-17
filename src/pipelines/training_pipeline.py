@@ -22,6 +22,7 @@ from src.features.feature_engineering import feature_engineering_pipeline
 from src.persistence import InferenceArtifacts
 from src.persistence.save import save_artifacts
 from src.utils.logger import get_logger
+from src.utils.feature_names import clean_feature_names
 
 logger = get_logger(__name__)
 
@@ -80,6 +81,8 @@ def prepare_training_data() -> ProcessedData:
     feature_names = (
         preprocessor.get_feature_names_out().tolist()
     )
+    feature_names = clean_feature_names(feature_names)
+
     logger.info("Preprocessing completed.")
 
 
