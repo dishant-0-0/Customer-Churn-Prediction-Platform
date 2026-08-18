@@ -25,6 +25,7 @@ from src.utils.logger import get_logger
 from src.utils.feature_names import clean_feature_names
 from src.explainability.shap import generate_explanation
 from src.visualization import generate_visualization 
+from src.reporting import generate_html_report
 
 logger = get_logger(__name__)
 
@@ -159,9 +160,15 @@ def run_training_pipeline(
 
     save_figures(figures)
 
-    return TrainingResult(
+    training_result = TrainingResult(
         model=model,
         evaluation= evaluation,
         artifacts= artifacts,
         artifacts_path= artifacts_path
     )
+
+    generate_html_report(
+        training_result
+    )
+
+    return training_result

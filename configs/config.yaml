@@ -63,7 +63,7 @@ training:
       eval_metric: logloss
 
 evaluation:
-  threshold: 0.25
+  threshold: 0.2
 
 logging:
   level: INFO
