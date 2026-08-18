@@ -156,6 +156,20 @@ class InferenceArtifacts:
 class TrainingResult:
     """
     Output of the complete training workflow.
+
+    Attributes
+    ----------
+    model: BaseEstimator
+        Trained model.
+
+    evaluation: EvaluationResult
+        Evaluation metrics and prediction outputs.
+
+    artifacts: InferenceArtifacts
+        Artifacts required for inference.
+
+    artifacts_path: Path
+        Directory where training artifacts were saved.
     """
 
     model: BaseEstimator
@@ -168,7 +182,11 @@ class TrainingResult:
 class ExplainabilityResult:
     """
     Explainability artifacts produced for a trained model.
+
+    Attributes
+    ----------
+    explanation: Any
+        return any explanation eg. SHAP explanation
     """
 
     explanation: Any
-    feature_names: list[str]
