@@ -33,7 +33,8 @@ def load_artifacts(
     required_files = {
         "model": model_dir / "model.joblib",
         "preprocessor": model_dir / "preprocessor.joblib",
-        "feature_names": model_dir / "feature_names.json"
+        "feature_names": model_dir / "feature_names.json",
+        "metadata": model_dir / "metadata.json",
     }
 
     for artifact_name, artifact_path in required_files.items():
@@ -61,6 +62,13 @@ def load_artifacts(
     ) as f:
         feature_names = json.load(f)
 
+    with open(
+        required_files["metadata"],
+        "r",
+        encoding="utf-8",
+    ) as file:
+        metadata = json.load(file)
+
     logger.info(
         f"Artifacts loaded successfully from '{experiment_dir}'."
     )
@@ -68,5 +76,6 @@ def load_artifacts(
     return InferenceArtifacts(
         model= model,
         preprocessor= preprocessor,
-        feature_names= feature_names
+        feature_names= feature_names,
+        high_value_threshold= metadata["high_value_threshold"]
     )

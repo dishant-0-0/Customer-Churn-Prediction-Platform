@@ -80,7 +80,10 @@ def create_avg_monthly_spend(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-def create_high_value_customer(df: pd.DataFrame) -> pd.DataFrame:
+def create_high_value_customer(
+        df: pd.DataFrame,
+        threshold: float
+    ) -> pd.DataFrame:
     """
     Create high-value customer indicator.
     """
@@ -88,14 +91,6 @@ def create_high_value_customer(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Creating 'High Value Customer' feature.")
 
     df = df.copy()
-
-    strategy = settings.feature_engineering.high_value_strategy
-    if strategy == "median":
-        threshold = df["CLTV"].median()
-    else:
-        raise ValueError(
-            f"Unsupported strategy: {strategy}"
-        )
 
     df["High Value Customer"] = (
         df["CLTV"] > threshold
@@ -115,7 +110,55 @@ def drop_location_columns(df: pd.DataFrame) -> pd.DataFrame:
         errors= "ignore"
     )
 
-def feature_engineering_pipeline(df: pd.DataFrame) -> pd.DataFrame:
+def create_total_services(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Create total subscribed services feature.
+    """
+
+    logger.info("Creating 'Total Services' feature.")
+
+    df = df.copy()
+
+    service_columns = [
+        "Phone Service",
+        "Multiple Lines",
+        "Online Security",
+        "Online Backup",
+        "Device Protection",
+        "Tech Support",
+        "Streaming TV",
+        "Streaming Movies",
+    ]
+
+    df["Total Services"] = (
+        df[service_columns]
+        .eq("Yes")
+        .sum(axis=1)
+    )
+
+    return df
+
+
+def create_monthly_contract(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Create monthly contract indicator.
+    """
+
+    logger.info("Creating 'Monthly Contract' feature.")
+
+    df = df.copy()
+
+    df["Monthly Contract"] = (
+        df["Contract"] == "Month-to-month"
+    ).astype(int)
+
+    return df
+
+
+def feature_engineering_pipeline(
+        df: pd.DataFrame,
+        high_value_threshold: float,
+    ) -> pd.DataFrame:
     """
     Apply all feature engineering transformations.
     """
@@ -125,8 +168,10 @@ def feature_engineering_pipeline(df: pd.DataFrame) -> pd.DataFrame:
     df = validate_dataframe(df)
     df = drop_identifier_columns(df)
     df = create_tenure_group(df)
+    df = create_total_services(df)
     df = create_avg_monthly_spend(df)
-    df = create_high_value_customer(df)
+    df = create_high_value_customer(df, high_value_threshold)
+    df = create_monthly_contract(df)
     df = drop_location_columns(df)
 
     logger.info("Feature engineering completed.")

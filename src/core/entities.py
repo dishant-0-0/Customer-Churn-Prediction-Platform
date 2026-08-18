@@ -64,6 +64,7 @@ class ProcessedData:
 
     numerical_columns: list[str]
     categorical_columns: list[str]
+    high_value_threshold: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -151,6 +152,8 @@ class InferenceArtifacts:
 
     feature_names: list[str]
 
+    high_value_threshold: float
+
 
 @dataclass(frozen=True, slots= True)
 class TrainingResult:
@@ -190,3 +193,13 @@ class ExplainabilityResult:
     """
 
     explanation: Any
+
+
+@dataclass(frozen=True, slots= True)
+class PredictionResult:
+    """
+    Prediction results.
+    """
+
+    predictions: np.ndarray
+    probabilities: np.ndarray

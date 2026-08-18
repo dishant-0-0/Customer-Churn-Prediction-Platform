@@ -3,7 +3,8 @@ from .entities import (
     EvaluationResult, 
     TrainingResult, 
     ExplainabilityResult, 
-    InferenceArtifacts
+    InferenceArtifacts,
+    PredictionResult
 )
 
 __all__ = [
@@ -11,5 +12,6 @@ __all__ = [
     "EvaluationResult",
     "TrainingResult",
     "ExplainabilityResult",
-    "InferenceArtifacts"
+    "InferenceArtifacts",
+    "PredictionResult"
     ]

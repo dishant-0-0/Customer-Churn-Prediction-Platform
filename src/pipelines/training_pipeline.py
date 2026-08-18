@@ -49,7 +49,8 @@ def prepare_training_data() -> ProcessedData:
 
 
     logger.info("Applying feature engineering.")
-    df = feature_engineering_pipeline(df)
+    high_value_threshold = df["CLTV"].median()
+    df = feature_engineering_pipeline(df,high_value_threshold)
     logger.info("Feature engineering completed. Dataset shape: %s", df.shape)
 
 
@@ -103,7 +104,8 @@ def prepare_training_data() -> ProcessedData:
         preprocessor= preprocessor,
         feature_names= feature_names,
         numerical_columns= numerical_cols,
-        categorical_columns= categorical_cols
+        categorical_columns= categorical_cols,
+        high_value_threshold= high_value_threshold
     )
 
 
@@ -131,7 +133,8 @@ def run_training_pipeline(
     artifacts = InferenceArtifacts(
         model= model,
         preprocessor= processed.preprocessor,
-        feature_names= processed.feature_names
+        feature_names= processed.feature_names,
+        high_value_threshold=processed.high_value_threshold
     )
 
     artifacts_path = save_artifacts(

@@ -44,6 +44,22 @@ def get_experiment_paths() -> dict[str, Path]:
         "reports": experiment_dir / "reports",
     }
 
+
+def _save_json(
+    data: dict | list,
+    output_path: Path,
+) -> None:
+    with output_path.open(
+        "w",
+        encoding="utf-8",
+    ) as file:
+        json.dump(
+            data,
+            file,
+            indent=4,
+        )
+
+
 def save_artifacts(
     artifacts: InferenceArtifacts,
     force: bool = False
@@ -84,16 +100,17 @@ def save_artifacts(
         directories["model"] / "preprocessor.joblib"
     )
 
-    with open(
+    _save_json(
+        artifacts.feature_names,
         directories["model"] / "feature_names.json",
-        "w",
-        encoding="utf-8",
-    ) as f:
-        json.dump(
-            artifacts.feature_names,
-            f,
-            indent=4,
-        )
+    )
+
+    _save_json(
+        {
+            "high_value_threshold": artifacts.high_value_threshold,
+        },
+        directories["model"] / "metadata.json",
+    )
 
     shutil.copy2(
         CONFIG_DIR / settings.files.config_file,

@@ -8,37 +8,46 @@ from src.models.predict import (
     predict,
     predict_proba
 )
+from src.core import PredictionResult, InferenceArtifacts
+from src.config.config import settings
 from src.persistence.load import load_artifacts
 from src.utils.logger import get_logger
+from src.features.feature_engineering import feature_engineering_pipeline
 
 logger = get_logger(__name__)
 
-def run_inference(
+def run_inference_pipeline(
     X: pd.DataFrame,
-    *,
-    return_probabilities: bool = False,
-):
+    artifacts: InferenceArtifacts,
+) -> PredictionResult:
     """
     Run the end to end inference pipeline.
     """
 
     logger.info("Starting inference pipeline.")
 
-    artifacts = load_artifacts()
+    logger.info("Applying feature engineering.")
 
-    if return_probabilities:
-        predictions = predict_proba(
-            model=artifacts.model,
-            preprocessor= artifacts.preprocessor,
-            X= X
-        )
-    else:
-        predictions = predict(
-            model=artifacts.model,
-            preprocessor= artifacts.preprocessor,
-            X=X
-        )
+    X = feature_engineering_pipeline(
+        df= X,
+        high_value_threshold= artifacts.high_value_threshold,
+    )
+
+    probabilities = predict_proba(
+        model=artifacts.model,
+        preprocessor= artifacts.preprocessor,
+        X= X
+    )
+
+    logger.info("Applying decision threshold.")
+
+    predictions = (
+        probabilities >= settings.evaluation.threshold
+    ).astype(int)
 
     logger.info("Inference pipeline completed successfully.")
 
-    return predictions
+    return PredictionResult(
+        predictions=predictions,
+        probabilities=probabilities,
+    )
