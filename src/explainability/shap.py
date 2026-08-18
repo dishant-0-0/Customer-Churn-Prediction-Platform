@@ -25,7 +25,6 @@ def generate_explanation(
     explanation = explainer(X)
 
     return ExplainabilityResult(
-        explanation= explanation,
-        feature_names= list(X.columns)
+        explanation= explanation
     )
 

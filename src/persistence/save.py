@@ -10,10 +10,39 @@ from src.config.paths import (
     ARTIFACTS_DIR,
     CONFIG_DIR
 )
-from src.core import InferenceArtifacts
+from src.core import InferenceArtifacts, EvaluationResult
 from src.utils.logger import get_logger
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 logger = get_logger(__name__)
+
+def get_experiment_dir() -> Path:
+    """
+    Return the directory for the current experiment.
+    """
+
+    experiment_name = (
+        f"{settings.training.model.name}_"
+        f"{settings.artifacts.version}"
+    )
+
+    return ARTIFACTS_DIR / experiment_name
+
+def get_experiment_paths() -> dict[str, Path]:
+    """
+    Return artifact directories for the current experiment.
+    """
+
+    experiment_dir = get_experiment_dir()
+
+    return {
+        "experiment": experiment_dir,
+        "model": experiment_dir / "model",
+        "metrics": experiment_dir / "metrics",
+        "figures": experiment_dir / "figures",
+        "reports": experiment_dir / "reports",
+    }
 
 def save_artifacts(
     artifacts: InferenceArtifacts,
@@ -25,32 +54,21 @@ def save_artifacts(
 
     logger.info("Saving artifacts.")
 
-    experiment_name = f"{settings.training.model.name}_{settings.artifacts.version}"
-
-    experiment_dir = ARTIFACTS_DIR / experiment_name
+    directories = get_experiment_paths()
+    experiment_dir = directories["experiment"]
 
     if experiment_dir.exists():
         if force:
             logger.warning(
-                f"Overwriting existing experiment: '{experiment_name}'"
+                f"Overwriting existing experiment."
             )
             shutil.rmtree(experiment_dir)
         else: 
             raise FileExistsError(
-                f"Experiment '{experiment_name}' already exists."
+                f"Experiment already exists."
             )
 
-    model_dir = experiment_dir / "model"
-    metrics_dir = experiment_dir / "metrics"
-    figures_dir = experiment_dir / "figures"
-    reports_dir = experiment_dir / "reports"
-
-    for directory in (
-        model_dir,
-        metrics_dir,
-        figures_dir,
-        reports_dir
-    ):
+    for directory in directories.values():
         directory.mkdir(
             parents= True,
             exist_ok=True,
@@ -58,16 +76,16 @@ def save_artifacts(
 
     joblib.dump(
         artifacts.model,
-        model_dir / "model.joblib",
+        directories["model"] / "model.joblib",
     )
 
     joblib.dump(
         artifacts.preprocessor,
-        model_dir / "preprocessor.joblib"
+        directories["model"] / "preprocessor.joblib"
     )
 
     with open(
-        model_dir / "feature_names.json",
+        directories["model"] / "feature_names.json",
         "w",
         encoding="utf-8",
     ) as f:
@@ -79,9 +97,93 @@ def save_artifacts(
 
     shutil.copy2(
         CONFIG_DIR / settings.files.config_file,
-        model_dir / settings.files.config_file
+        directories["model"] / settings.files.config_file
     )
 
     logger.info(f"Artifacts saved to '{experiment_dir}'.")
 
     return experiment_dir
+
+
+def save_metrics(
+    evaluation: EvaluationResult
+) -> Path:
+    """
+    Save evaluation metrics as JSON.
+    """
+
+    directories = get_experiment_paths()
+    output_path = directories["metrics"] / "metrics.json"
+
+    metrics = {
+        "accuracy": evaluation.accuracy,
+        "precision": evaluation.precision,
+        "recall": evaluation.recall,
+        "f1": evaluation.f1,
+        "roc_auc": evaluation.roc_auc,
+        "average_precision": evaluation.average_precision
+    }
+
+    with output_path.open("w", encoding="utf-8") as file:
+        json.dump(
+            metrics,
+            file,
+            indent=4
+        )
+
+    logger.info(f"Saved metrics to '{output_path}'.")
+
+    return output_path
+
+
+def save_figure(
+    figure: Figure,
+    output_path: Path,
+) -> Path:
+    """
+    Save a matplotlib figure.
+    """
+
+    output_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    figure.savefig(
+        output_path,
+        dpi=300,
+        bbox_inches="tight",
+    )
+
+    plt.close(figure)
+
+    logger.info(f"Saved figure: {output_path}")
+
+    return output_path
+
+def save_figures(
+    figures: dict[str, Figure],
+) -> list[Path]:
+    """
+    Save all generated figures for the current experiment.
+    """
+
+    paths = get_experiment_paths()
+
+    saved_paths: list[Path] = []
+
+    for name, figure in figures.items():
+
+        output_path = (
+            paths["figures"] /
+            f"{name}.png"
+        )
+
+        save_figure(
+            figure,
+            output_path,
+        )
+
+        saved_paths.append(output_path)
+
+    return saved_paths

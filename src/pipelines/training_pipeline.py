@@ -20,9 +20,11 @@ from src.data.preprocessing import (
     split_data
 )
 from src.features.feature_engineering import feature_engineering_pipeline
-from src.persistence.save import save_artifacts
+from src.persistence.save import save_artifacts, save_metrics, save_figures
 from src.utils.logger import get_logger
 from src.utils.feature_names import clean_feature_names
+from src.explainability.shap import generate_explanation
+from src.visualization import generate_visualization 
 
 logger = get_logger(__name__)
 
@@ -133,6 +135,29 @@ def run_training_pipeline(
         artifacts,
         force = force
     )
+
+    save_metrics(
+        evaluation,
+    )
+
+    X_shap = pd.DataFrame(
+        processed.X_test_processed[:250],
+        columns=processed.feature_names,
+    )
+
+    explanation = generate_explanation(
+        model=model,
+        X=X_shap,
+    )
+
+    figures = generate_visualization(
+        evaluation=evaluation,
+        explainability=explanation,
+        model=model,
+        feature_names=processed.feature_names,
+    )
+
+    save_figures(figures)
 
     return TrainingResult(
         model=model,
