@@ -73,6 +73,11 @@ logging:
 artifacts:
   version: v1
 
+tracking:
+  enabled: true
+  experiment_name: customer_churn
+  tracking_uri: sqlite:///mlflow.db
+
 visualization:
   style: seaborn-v0_8
   dpi: 150

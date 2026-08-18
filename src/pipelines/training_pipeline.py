@@ -26,6 +26,8 @@ from src.utils.feature_names import clean_feature_names
 from src.explainability.shap import generate_explanation
 from src.visualization import generate_visualization 
 from src.reporting import generate_html_report
+from src.tracking import log_experiment
+
 
 logger = get_logger(__name__)
 
@@ -169,6 +171,10 @@ def run_training_pipeline(
 
     generate_html_report(
         training_result
+    )
+
+    log_experiment(
+        training_result= training_result
     )
 
     return training_result

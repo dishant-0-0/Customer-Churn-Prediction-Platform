@@ -48,6 +48,7 @@ logs/
 # ---MLflow---
 mlruns/
 mlartifacts/
+mlflow.db
 
 
 # ---Jupyter---

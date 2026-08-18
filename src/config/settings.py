@@ -83,6 +83,11 @@ class VisualizationConfig(AppConfig):
     feature_importance: FeatureImportanceConfig
     shap: ShapConfig
 
+class TrackingConfig(AppConfig):
+    enabled: bool
+    experiment_name: str
+    tracking_uri: str
+
 class Settings(AppConfig):
     project: ProjectConfig
     files: FilesConfig
@@ -93,3 +98,4 @@ class Settings(AppConfig):
     evaluation: EvaluationConfig
     artifacts: ArtifactsConfig
     visualization: VisualizationConfig
+    tracking: TrackingConfig
