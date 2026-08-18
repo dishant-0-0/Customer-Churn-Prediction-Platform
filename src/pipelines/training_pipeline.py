@@ -10,7 +10,8 @@ from src.models.train import train_model
 from src.models.evaluate import evaluate_model
 from src.core import (
     ProcessedData,
-    TrainingResult
+    TrainingResult,
+    InferenceArtifacts
     )
 from src.data.loader import load_data
 from src.data.preprocessing import (
@@ -19,7 +20,6 @@ from src.data.preprocessing import (
     split_data
 )
 from src.features.feature_engineering import feature_engineering_pipeline
-from src.persistence import InferenceArtifacts
 from src.persistence.save import save_artifacts
 from src.utils.logger import get_logger
 from src.utils.feature_names import clean_feature_names

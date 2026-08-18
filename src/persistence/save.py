@@ -10,7 +10,7 @@ from src.config.paths import (
     ARTIFACTS_DIR,
     CONFIG_DIR
 )
-from src.persistence import InferenceArtifacts
+from src.core import InferenceArtifacts
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)

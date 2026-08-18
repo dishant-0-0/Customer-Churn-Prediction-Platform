@@ -7,7 +7,7 @@ import json, joblib
 from pathlib import Path
 from src.config.config import settings
 from src.config.paths import ARTIFACTS_DIR
-from src.persistence import InferenceArtifacts
+from src.core import InferenceArtifacts
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)

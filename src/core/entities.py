@@ -10,7 +10,6 @@ import pandas as pd
 from pathlib import Path
 from sklearn.compose import ColumnTransformer
 from sklearn.base import BaseEstimator
-from src.persistence import InferenceArtifacts
 
 @dataclass(frozen=True, slots=True)
 class ProcessedData:
@@ -127,6 +126,30 @@ class EvaluationResult:
     precision_curve: np.ndarray
     recall_curve: np.ndarray
     pr_thresholds: np.ndarray
+
+
+@dataclass(frozen=True, slots=True)
+class InferenceArtifacts:
+    """
+    Runtime artifacts required for inference.
+
+    Attributes
+    ----------
+    model: BaseEstimator
+        Trained model.
+    
+    preprocessor: ColumnTransformer
+        Fitted preprocessing pipeline.
+
+    feature_names: list[str]
+        List of feature names.
+    """
+
+    model: BaseEstimator
+
+    preprocessor: ColumnTransformer
+
+    feature_names: list[str]
 
 
 @dataclass(frozen=True, slots= True)
