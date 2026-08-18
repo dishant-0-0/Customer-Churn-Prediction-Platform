@@ -27,7 +27,7 @@ def _log_parameters(
     logger.info("Logging parameters.")
 
     params = {
-        "threshold": settings.training.threshold,
+        "threshold": settings.evaluation.threshold,
         "random_state": settings.data.random_state,
         "test_size": settings.data.test_size,
         "target": settings.data.target,
