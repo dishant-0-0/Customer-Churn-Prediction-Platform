@@ -17,6 +17,7 @@ def create_shap_summary(
     Create a SHAP beeswam summary plot.
     """
 
+    plt.figure()
     shap.plots.beeswarm(
         explanation.explanation,
         show= False
