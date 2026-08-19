@@ -36,9 +36,6 @@ data/processed/*
 # ---ML artifacts---
 artifacts/*
 models/*.pkl
-*.pkl
-*.joblib
-
 
 # ---Logs---
 logs/
@@ -64,3 +61,14 @@ mlflow.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+
+# Static analysis
+.mypy_cache/
+.ruff_cache/

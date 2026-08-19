@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Notebooks
+notebooks/
+
+# Logs
+logs/
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+customer_churn_ml.egg-info/
+build/
+dist/
+
+# MLflow (optional - see note below)
+tmp_mlflow_trust/
