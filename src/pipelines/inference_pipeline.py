@@ -4,13 +4,9 @@ Inference pipeline.
 
 from __future__ import annotations
 import pandas as pd
-from src.models.predict import (
-    predict,
-    predict_proba
-)
+from src.models.predict import predict_proba
 from src.core import PredictionResult, InferenceArtifacts
 from src.config.config import settings
-from src.persistence.load import load_artifacts
 from src.utils.logger import get_logger
 from src.features.feature_engineering import feature_engineering_pipeline
 

@@ -141,12 +141,10 @@ def save_metrics(
         "average_precision": evaluation.average_precision
     }
 
-    with output_path.open("w", encoding="utf-8") as file:
-        json.dump(
-            metrics,
-            file,
-            indent=4
-        )
+    _save_json(
+        metrics,
+        output_path
+    )
 
     logger.info(f"Saved metrics to '{output_path}'.")
 

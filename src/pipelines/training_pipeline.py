@@ -118,12 +118,18 @@ def run_training_pipeline(
 
     processed = prepare_training_data()
 
+    logger.info("Creating model instance.")
+
     model = get_model()
+
+    logger.info(f"Training '{settings.training.model.name}' model.")
 
     model = train_model(
         processed,
         model
     )
+
+    logger.info(f"Evaluating '{settings.training.model.name}' model.")
 
     evaluation = evaluate_model(
         processed,
@@ -137,10 +143,14 @@ def run_training_pipeline(
         high_value_threshold=processed.high_value_threshold
     )
 
+    logger.info(f"Saving artifacts.")
+
     artifacts_path = save_artifacts(
         artifacts,
         force = force
     )
+
+    logger.info(f"Saving metrics.")
 
     save_metrics(
         evaluation,
@@ -151,10 +161,14 @@ def run_training_pipeline(
         columns=processed.feature_names,
     )
 
+    logger.info(f"Generating explanation.")
+
     explanation = generate_explanation(
         model=model,
         X=X_shap,
     )
+
+    logger.info(f"Generating visualization.")
 
     figures = generate_visualization(
         evaluation=evaluation,
@@ -162,6 +176,8 @@ def run_training_pipeline(
         model=model,
         feature_names=processed.feature_names,
     )
+
+    logger.info(f"Saving visualization.")
 
     save_figures(figures)
 
@@ -172,9 +188,13 @@ def run_training_pipeline(
         artifacts_path= artifacts_path
     )
 
-    generate_html_report(
+    logger.info(f"Generating Report.")
+
+    report_path = generate_html_report(
         training_result
     )
+
+    logger.info(f"Logging Experiment.")
 
     log_experiment(
         training_result= training_result

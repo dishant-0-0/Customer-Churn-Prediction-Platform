@@ -9,6 +9,18 @@ from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+SERVICE_COLUMNS = [
+        "Phone Service",
+        "Multiple Lines",
+        "Online Security",
+        "Online Backup",
+        "Device Protection",
+        "Tech Support",
+        "Streaming TV",
+        "Streaming Movies",
+    ]
+
+
 def validate_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
     Validate the input dataframe before feature engineering.
@@ -119,19 +131,8 @@ def create_total_services(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    service_columns = [
-        "Phone Service",
-        "Multiple Lines",
-        "Online Security",
-        "Online Backup",
-        "Device Protection",
-        "Tech Support",
-        "Streaming TV",
-        "Streaming Movies",
-    ]
-
     df["Total Services"] = (
-        df[service_columns]
+        df[SERVICE_COLUMNS]
         .eq("Yes")
         .sum(axis=1)
     )

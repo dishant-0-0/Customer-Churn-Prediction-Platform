@@ -12,6 +12,21 @@ from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+
+def _load_json(
+    input_path: Path,
+) -> dict | list:
+    """
+    Load JSON data from disk.
+    """
+
+    with input_path.open(
+        "r",
+        encoding="utf-8",
+    ) as file:
+        return json.load(file)
+    
+
 def load_artifacts(
     experiment_name: str | None = None,
 ) -> InferenceArtifacts:
@@ -55,19 +70,13 @@ def load_artifacts(
         required_files["preprocessor"]
     )
 
-    with open(
-        required_files["feature_names"],
-        "r",
-        encoding= "utf-8"
-    ) as f:
-        feature_names = json.load(f)
+    metadata = _load_json(
+        required_files["metadata"]
+    )
 
-    with open(
-        required_files["metadata"],
-        "r",
-        encoding="utf-8",
-    ) as file:
-        metadata = json.load(file)
+    feature_names = _load_json(
+        required_files["feature_names"]
+    )
 
     logger.info(
         f"Artifacts loaded successfully from '{experiment_dir}'."
