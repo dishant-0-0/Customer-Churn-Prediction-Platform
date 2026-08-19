@@ -88,6 +88,18 @@ class TrackingConfig(AppConfig):
     experiment_name: str
     tracking_uri: str
 
+class CorsConfig(AppConfig):
+    allow_origins: list[str]
+    allow_credentials: bool
+    allow_methods: list[str]
+    allow_headers: list[str]
+
+class ApiConfig(AppConfig):
+    title: str
+    description: str
+    version: str
+    cors: CorsConfig
+
 class Settings(AppConfig):
     project: ProjectConfig
     files: FilesConfig
@@ -99,3 +111,4 @@ class Settings(AppConfig):
     artifacts: ArtifactsConfig
     visualization: VisualizationConfig
     tracking: TrackingConfig
+    api: ApiConfig

@@ -18,7 +18,10 @@ from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
-router = APIRouter()
+router = APIRouter(
+    prefix= "/api/v1",
+    tags= ["Customer Churn"]
+)
 
 @router.get( "/", response_model=RootResponse)
 async def root() -> RootResponse:

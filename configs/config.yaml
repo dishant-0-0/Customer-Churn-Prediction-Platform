@@ -105,3 +105,18 @@ visualization:
 
   shap:
     max_display: 20
+
+
+api:
+  title: "Customer Churn Prediction API"
+  description: "REST API for customer churn prediction."
+  version: "1.0.0"
+
+  cors:
+    allow_origins:
+      - "*"
+    allow_credentials: true
+    allow_methods:
+      - "*"
+    allow_headers:
+      - "*"
