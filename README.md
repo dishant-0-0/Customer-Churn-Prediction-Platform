@@ -1,8 +1,10 @@
 # 🚀 Customer Churn Prediction Platform
 
-> A production-ready Machine Learning platform for predicting customer churn using modern ML engineering and MLOps best practices.
+> A Machine Learning platform for predicting customer churn using modern ML engineering and MLOps best practices.
 
 <p align="center">
+
+[![CodeQL](https://github.com/dishant-0-0/Customer-Churn-Prediction-Platform/actions/workflows/codeql.yml/badge.svg)](https://github.com/dishant-0-0/Customer-Churn-Prediction-Platform/actions/workflows/codeql.yml)
 
 [![CI](https://github.com/dishant-0-0/Customer-Churn-Prediction-Platform/actions/workflows/ci.yml/badge.svg)](https://github.com/dishant-0-0/Customer-Churn-Prediction-Platform/actions/workflows/ci.yml)
 
@@ -18,7 +20,7 @@
 
 # 📌 Overview
 
-Customer churn prediction is one of the most common business applications of Machine Learning. This project provides a **production-ready end-to-end ML platform** that predicts whether a customer is likely to churn while demonstrating modern software engineering, MLOps, testing, and deployment practices.
+Customer churn prediction is one of the most common business applications of Machine Learning. This project provides a **end-to-end ML platform** that predicts whether a customer is likely to churn while demonstrating modern software engineering, MLOps, testing, and deployment practices.
 
 Unlike a traditional notebook-based ML project, this repository includes:
 
