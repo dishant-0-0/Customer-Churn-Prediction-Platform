@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1240" viewBox="0 0 1600 1240" role="img" aria-labelledby="title desc">
+  <title id="title">Customer Churn Prediction Platform Architecture</title>
+  <desc id="desc">Architecture diagram showing the data, machine learning, output, serving, and engineering layers of a customer churn prediction platform.</desc>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#16324f" flood-opacity=".12"/></filter>
+    <filter id="lightShadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#16324f" flood-opacity=".09"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#63738a"/></marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2583c7"/></marker>
+    <style>
+      text { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #18334e; }
+      .title { font-size: 34px; font-weight: 700; letter-spacing: -.6px; } .subtitle { font-size: 16px; fill: #65758a; }
+      .layer-title { font-size: 16px; font-weight: 700; letter-spacing: 1.6px; } .node-title { font-size: 15px; font-weight: 650; }
+      .node-sub { font-size: 12px; fill: #6f7f91; } .small { font-size: 13px; font-weight: 600; }
+      .flow { fill: none; stroke: #63738a; stroke-width: 2.25; marker-end: url(#arrow); } .flow-line { fill: none; stroke: #63738a; stroke-width: 2.25; }
+      .flow-blue { fill: none; stroke: #2583c7; stroke-width: 2.5; marker-end: url(#arrowBlue); }
+    </style>
+  </defs>
+  <rect width="1600" height="1240" fill="#fff"/>
+  <rect x="40" y="28" width="1520" height="82" rx="20" fill="#f7fafc"/><circle cx="85" cy="69" r="22" fill="#2583c7"/>
+  <path d="M75 69h20M85 59v20" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+  <text x="122" y="65" class="title">Customer Churn Prediction Platform Architecture</text><text x="123" y="89" class="subtitle">An end-to-end MLOps workflow from raw customer data to real-time predictions</text>
+
+  <rect x="40" y="138" width="1520" height="172" rx="22" fill="#eef8ff" stroke="#b8dff6" stroke-width="1.5"/><rect x="40" y="138" width="12" height="172" rx="6" fill="#2583c7"/>
+  <text x="76" y="171" class="layer-title" fill="#1471b7">DATA LAYER</text><line x1="76" y1="185" x2="1524" y2="185" stroke="#cbe6f8"/>
+  <g filter="url(#lightShadow)"><rect x="76" y="211" width="244" height="72" rx="13" fill="#fff"/><rect x="355" y="211" width="225" height="72" rx="13" fill="#fff"/><rect x="615" y="211" width="225" height="72" rx="13" fill="#fff"/><rect x="875" y="211" width="270" height="72" rx="13" fill="#fff"/><rect x="1180" y="211" width="275" height="72" rx="13" fill="#fff"/></g>
+  <text x="198" y="241" text-anchor="middle" class="node-title">IBM Telco Customer</text><text x="198" y="261" text-anchor="middle" class="node-sub">Churn Dataset</text><text x="467" y="251" text-anchor="middle" class="node-title">Data Loading</text><text x="727" y="251" text-anchor="middle" class="node-title">Data Validation</text><text x="1010" y="251" text-anchor="middle" class="node-title">Feature Engineering</text><text x="1318" y="251" text-anchor="middle" class="node-title">Preprocessing</text>
+  <path d="M320 247H355M580 247H615M840 247H875M1145 247H1180" class="flow"/>
+
+  <rect x="40" y="338" width="1520" height="174" rx="22" fill="#f3f0ff" stroke="#d8cef8" stroke-width="1.5"/><rect x="40" y="338" width="12" height="174" rx="6" fill="#7856ce"/>
+  <text x="76" y="371" class="layer-title" fill="#6345b1">MACHINE LEARNING LAYER</text><line x1="76" y1="385" x2="1524" y2="385" stroke="#e0d9fa"/>
+  <g filter="url(#lightShadow)"><rect x="384" y="412" width="245" height="72" rx="13" fill="#fff"/><rect x="678" y="412" width="245" height="72" rx="13" fill="#fff"/><rect x="972" y="412" width="245" height="72" rx="13" fill="#fff"/></g>
+  <text x="506" y="452" text-anchor="middle" class="node-title">Model Registry</text><text x="800" y="452" text-anchor="middle" class="node-title">Training Pipeline</text><text x="1094" y="452" text-anchor="middle" class="node-title">Model Evaluation</text>
+  <path d="M1318 283V348H506V412" class="flow-blue"/><path d="M629 448H678M923 448H972" class="flow"/>
+
+  <rect x="40" y="540" width="1520" height="262" rx="22" fill="#f0fbf7" stroke="#c7eadc" stroke-width="1.5"/><rect x="40" y="540" width="12" height="262" rx="6" fill="#16a77a"/>
+  <text x="76" y="573" class="layer-title" fill="#0c8a64">OUTPUTS &amp; OBSERVABILITY</text><line x1="76" y1="587" x2="1524" y2="587" stroke="#d4efdf"/>
+  <g filter="url(#lightShadow)"><rect x="176" y="623" width="235" height="68" rx="13" fill="#fff"/><rect x="495" y="623" width="235" height="68" rx="13" fill="#fff"/><rect x="814" y="623" width="235" height="68" rx="13" fill="#fff"/><rect x="477" y="734" width="270" height="58" rx="13" fill="#e1f7ee" stroke="#8bd3b7" stroke-width="1.4"/></g>
+  <text x="293" y="663" text-anchor="middle" class="node-title">MLflow Tracking</text><text x="612" y="663" text-anchor="middle" class="node-title">SHAP Explainability</text><text x="931" y="663" text-anchor="middle" class="node-title">HTML Report</text><text x="612" y="769" text-anchor="middle" class="node-title">Saved Artifacts</text>
+  <path d="M1094 484V606H293M1094 484V606H612M1094 484V606H931" class="flow-line"/><path d="M293 606V623" class="flow"/><path d="M612 606V623" class="flow"/><path d="M931 606V623" class="flow"/>
+  <path d="M293 691V720H612M612 691V720M931 691V720H612" class="flow-line"/><path d="M612 720V734" class="flow"/>
+
+  <rect x="40" y="830" width="1520" height="173" rx="22" fill="#fff5ed" stroke="#f5d5b5" stroke-width="1.5"/><rect x="40" y="830" width="12" height="173" rx="6" fill="#e78328"/>
+  <text x="76" y="863" class="layer-title" fill="#c96916">SERVING LAYER</text><line x1="76" y1="877" x2="1524" y2="877" stroke="#f8dfc8"/>
+  <g filter="url(#lightShadow)"><rect x="487" y="904" width="250" height="70" rx="13" fill="#fff"/><rect x="812" y="904" width="250" height="70" rx="13" fill="#fff"/><rect x="1137" y="904" width="250" height="70" rx="13" fill="#fff"/></g>
+  <text x="612" y="946" text-anchor="middle" class="node-title">Inference Pipeline</text><text x="937" y="946" text-anchor="middle" class="node-title">FastAPI REST API</text><text x="1262" y="946" text-anchor="middle" class="node-title">Prediction Response</text>
+  <path d="M612 792V904" class="flow-blue"/><path d="M737 939H812M1062 939H1137" class="flow"/>
+
+  <rect x="40" y="1031" width="1520" height="164" rx="22" fill="#f4f7fa" stroke="#dbe3eb" stroke-width="1.5"/><rect x="40" y="1031" width="12" height="164" rx="6" fill="#62758a"/>
+  <text x="76" y="1064" class="layer-title" fill="#52667c">ENGINEERING FOUNDATION</text><text x="332" y="1064" class="subtitle">Continuous quality, security, and delivery across every layer</text><line x1="76" y1="1078" x2="1524" y2="1078" stroke="#e2e8ee"/>
+  <g filter="url(#lightShadow)"><rect x="86" y="1102" width="184" height="56" rx="12" fill="#fff"/><rect x="294" y="1102" width="150" height="56" rx="12" fill="#fff"/><rect x="468" y="1102" width="140" height="56" rx="12" fill="#fff"/><rect x="632" y="1102" width="140" height="56" rx="12" fill="#fff"/><rect x="796" y="1102" width="140" height="56" rx="12" fill="#fff"/><rect x="960" y="1102" width="140" height="56" rx="12" fill="#fff"/><rect x="1124" y="1102" width="140" height="56" rx="12" fill="#fff"/></g>
+  <text x="178" y="1136" text-anchor="middle" class="small">GitHub Actions</text><text x="369" y="1136" text-anchor="middle" class="small">Pytest</text><text x="538" y="1136" text-anchor="middle" class="small">Ruff</text><text x="702" y="1136" text-anchor="middle" class="small">Black</text><text x="866" y="1136" text-anchor="middle" class="small">isort</text><text x="1030" y="1136" text-anchor="middle" class="small">MyPy</text><text x="1194" y="1136" text-anchor="middle" class="small">CodeQL</text>
+  <path d="M800 1031V1017" stroke="#8b9aaa" stroke-width="2" stroke-dasharray="5 5"/><text x="800" y="1221" text-anchor="middle" class="subtitle">Customer Churn Prediction Platform · reproducible, observable, production-ready</text>
+</svg>

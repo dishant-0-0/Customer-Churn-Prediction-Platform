@@ -99,33 +99,11 @@ Unlike a traditional notebook-based ML project, this repository includes:
 
 ---
 
-# 🏗 Project Architecture
+## 🏗 Architecture
 
-```text
-                    Customer Churn Prediction Platform
-
-                            Raw Dataset
-                                 │
-                                 ▼
-                         Data Validation
-                                 │
-                                 ▼
-                      Feature Engineering
-                                 │
-                                 ▼
-                          Preprocessing
-                                 │
-                    ┌────────────┴────────────┐
-                    ▼                         ▼
-               Model Training          Inference Pipeline
-                    │                         │
-                    ▼                         ▼
-            Model Evaluation          Customer Prediction
-                    │
-        ┌───────────┼────────────────────────────────┐
-        ▼           ▼               ▼                ▼
-     MLflow      SHAP         HTML Reports      Artifacts
-```
+<p align="center">
+  <img src="./docs/images/architecture.svg" alt="Customer Churn Prediction Platform Architecture" width="1000"/>
+</p>
 
 ---
 
