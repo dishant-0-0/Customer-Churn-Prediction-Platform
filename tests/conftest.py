@@ -15,7 +15,7 @@ from sklearn.preprocessing import StandardScaler
 from pathlib import Path
 from src.persistence import save, load
 from unittest.mock import Mock
-from src.core import InferenceArtifacts, EvaluationResult
+from src.core import InferenceArtifacts, EvaluationResult, TrainingResult
 
 
 SAMPLE_CUSTOMER = {
@@ -394,3 +394,22 @@ def create_saved_artifacts(
         )
 
     return _create
+
+
+from pathlib import Path
+
+@pytest.fixture
+def mock_training_result(
+    mock_evaluation_result,
+    mock_inference_artifacts,
+) -> TrainingResult:
+    """
+    Return a mock TrainingResult.
+    """
+
+    return TrainingResult(
+        model=mock_inference_artifacts.model,
+        evaluation=mock_evaluation_result,
+        artifacts=mock_inference_artifacts,
+        artifacts_path=Path("artifacts/xgboost_v1"),
+    )
