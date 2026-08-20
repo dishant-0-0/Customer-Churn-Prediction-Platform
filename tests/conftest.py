@@ -4,9 +4,14 @@ Shared pytest fixtures.
 
 from __future__ import annotations
 import pandas as pd
-import pytest
-from unittest.mock import Mock
 import numpy as np
+import pytest
+from sklearn.dummy import DummyClassifier
+from sklearn.preprocessing import StandardScaler
+from pathlib import Path
+from src.persistence import save
+from unittest.mock import Mock
+from src.core import InferenceArtifacts, EvaluationResult
 
 
 SAMPLE_CUSTOMER = {
@@ -144,3 +149,140 @@ def mock_processed_data() -> Mock:
     )
 
     return processed
+
+
+@pytest.fixture
+def sample_feature_names() -> list[str]:
+    """
+    Return sample feature names.
+    """
+
+    return [
+        "Monthly Charges",
+        "Tenure Months",
+        "Total Services",
+        "Avg Monthly Spend",
+    ]
+
+
+@pytest.fixture
+def mock_inference_artifacts(
+    sample_feature_names,
+) -> InferenceArtifacts:
+    """
+    Return inference artifacts.
+    """
+
+    return InferenceArtifacts(
+        model=DummyClassifier(strategy="most_frequent"),
+        preprocessor=StandardScaler(),
+        feature_names=sample_feature_names,
+        high_value_threshold=5000.0,
+    )
+
+
+@pytest.fixture
+def mock_evaluation_result() -> EvaluationResult:
+    """
+    Return a mock evaluation result.
+    """
+
+    return EvaluationResult(
+        y_pred=np.array([1, 0, 1, 0]),
+        y_prob=np.array([0.91, 0.12, 0.81, 0.22]),
+        accuracy=0.95,
+        precision=0.94,
+        recall=0.96,
+        f1=0.95,
+        roc_auc=0.98,
+        confusion_matrix=np.array(
+            [
+                [2, 0],
+                [0, 2],
+            ]
+        ),
+        fpr=np.array(
+            [
+                0.0,
+                0.1,
+                1.0,
+            ]
+        ),
+        tpr=np.array(
+            [
+                0.0,
+                0.9,
+                1.0,
+            ]
+        ),
+        roc_thresholds=np.array(
+            [
+                np.inf,
+                0.9,
+                0.1,
+            ]
+        ),
+        precision_curve=np.array(
+            [
+                1.0,
+                0.95,
+                0.90,
+            ]
+        ),
+        recall_curve=np.array(
+            [
+                0.0,
+                0.75,
+                1.0,
+            ]
+        ),
+        average_precision=0.97,
+        pr_thresholds=np.array(
+            [
+                0.2,
+                0.5,
+            ]
+        ),
+    )
+
+
+@pytest.fixture
+def patched_artifact_dirs(
+    tmp_path: Path,
+    monkeypatch,
+) -> Path:
+    """
+    Patch persistence directories to use a temporary location.
+    """
+
+    artifacts_dir = tmp_path / "artifacts"
+    config_dir = tmp_path / "config"
+
+    monkeypatch.setattr(
+        save,
+        "ARTIFACTS_DIR",
+        artifacts_dir,
+    )
+
+    monkeypatch.setattr(
+        save,
+        "CONFIG_DIR",
+        config_dir,
+    )
+
+    config_dir.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    config_file = (
+        config_dir /
+        save.settings.files.config_file
+    )
+
+    config_file.write_text(
+        "dummy-config",
+        encoding="utf-8",
+    )
+
+    return artifacts_dir
