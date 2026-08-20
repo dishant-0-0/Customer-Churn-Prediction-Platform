@@ -12,7 +12,6 @@ from src.config.config import settings
 from src.core import TrainingResult
 from src.utils.logger import get_logger
 from src.config.paths import PROJECT_ROOT
-from src.config.config import settings
 
 logger = get_logger(__name__)
 
