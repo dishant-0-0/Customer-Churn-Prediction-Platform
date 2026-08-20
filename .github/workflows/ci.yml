@@ -1,20 +1,19 @@
-name: CI
+name: Continuous Integration
 
 on:
   push:
     branches:
       - main
-      - master
       - develop
 
   pull_request:
     branches:
       - main
-      - master
       - develop
 
 jobs:
   test:
+    name: Python 3.13
 
     runs-on: ubuntu-latest
 
@@ -23,7 +22,6 @@ jobs:
         python-version: ["3.13"]
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -31,27 +29,23 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pip"
-
-      - name: Upgrade pip
-        run: |
-          python -m pip install --upgrade pip
+          cache: pip
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Check formatting (Black)
+      - name: Run pre-commit
         run: |
-          black --check .
+          pre-commit run --all-files
 
-      - name: Lint (Ruff)
+      - name: Run unit tests
         run: |
-          ruff check .
-
-      - name: Run tests
-        run: |
-          pytest tests --cov=src --cov-report=xml --cov-report=term-missing
+          pytest tests \
+            --cov=src \
+            --cov-report=xml \
+            --cov-report=term-missing
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
