@@ -34,7 +34,7 @@ def test_get_experiment_dir(
 
 
 def test_save_artifacts(
-    mock_inference_artifacts,
+    serializable_inference_artifacts,
     patched_artifact_dirs,
 ):
     """
@@ -42,7 +42,7 @@ def test_save_artifacts(
     """
 
     experiment_dir = save.save_artifacts(
-        mock_inference_artifacts,
+        serializable_inference_artifacts,
     )
 
     model_dir = experiment_dir / "model"
@@ -61,7 +61,7 @@ def test_save_artifacts(
 
     assert (
         feature_names
-        == mock_inference_artifacts.feature_names
+        == serializable_inference_artifacts.feature_names
     )
 
     with (model_dir / "metadata.json").open(
@@ -71,12 +71,12 @@ def test_save_artifacts(
 
     assert (
         metadata["high_value_threshold"]
-        == mock_inference_artifacts.high_value_threshold
+        == serializable_inference_artifacts.high_value_threshold
     )
 
 
 def test_save_artifacts_existing_directory(
-    mock_inference_artifacts,
+    serializable_inference_artifacts,
     patched_artifact_dirs,
 ):
     """
@@ -84,12 +84,12 @@ def test_save_artifacts_existing_directory(
     """
 
     save.save_artifacts(
-        mock_inference_artifacts,
+        serializable_inference_artifacts,
     )
 
     with pytest.raises(FileExistsError):
         save.save_artifacts(
-            mock_inference_artifacts,
+            serializable_inference_artifacts,
         )
 
 
@@ -208,7 +208,7 @@ def test_save_figures(
 
 
 def test_save_artifacts_force_overwrite(
-    mock_inference_artifacts,
+    serializable_inference_artifacts,
     patched_artifact_dirs,
 ):
     """
@@ -216,11 +216,11 @@ def test_save_artifacts_force_overwrite(
     """
 
     save.save_artifacts(
-        mock_inference_artifacts,
+        serializable_inference_artifacts,
     )
 
     experiment_dir = save.save_artifacts(
-        mock_inference_artifacts,
+        serializable_inference_artifacts,
         force=True,
     )
 

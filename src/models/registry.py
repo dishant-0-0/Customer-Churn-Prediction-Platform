@@ -28,11 +28,13 @@ def get_model() -> BaseEstimator:
 
     logger.info("Creating model: %s", model_name)
 
-    if model_name not in MODEL_REGISTRY:
+    try:
+        model_class = MODEL_REGISTRY[model_name]
+    except KeyError as exc:
         raise ValueError(
-            f"Unknown model: '{model_name}'."
+            f"Unknown model: '{model_name}'. "
             f"Available models: {list(MODEL_REGISTRY.keys())}"
-        )
+        ) from exc
 
     model_class = MODEL_REGISTRY[model_name]
 

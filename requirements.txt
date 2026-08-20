@@ -11,6 +11,8 @@ python-dotenv
 pyyaml
 joblib
 pytest
+pytest-cov
 shap
 ipykernel
 pydantic>=2.0
+httpx

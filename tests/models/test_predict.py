@@ -55,7 +55,7 @@ def test_predict_proba(
         X=sample_prediction_dataframe,
     )
 
-    expected = np.array([0.7, 0.2])
+    expected = np.array([0.8, 0.3])
 
     assert np.array_equal(
         result,

@@ -10,12 +10,15 @@ import json
 import joblib
 from sklearn.dummy import DummyClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.dummy import DummyClassifier
-from sklearn.preprocessing import StandardScaler
 from pathlib import Path
 from src.persistence import save, load
-from unittest.mock import Mock
-from src.core import InferenceArtifacts, EvaluationResult, TrainingResult
+from unittest.mock import Mock, MagicMock
+from src.core import (
+    InferenceArtifacts, 
+    EvaluationResult, 
+    TrainingResult,
+    ProcessedData
+)
 
 
 SAMPLE_CUSTOMER = {
@@ -113,46 +116,99 @@ def mock_preprocessor() -> Mock:
 
 
 @pytest.fixture
-def mock_model() -> Mock:
-    """
-    Return a mock classifier.
-    """
+def mock_model():
+    model = MagicMock()
 
-    model = Mock()
+    model.predict.return_value = np.array([1, 0])
 
     model.predict_proba.return_value = np.array(
         [
-            [0.3, 0.7],
-            [0.8, 0.2],
+            [0.2, 0.8],
+            [0.7, 0.3],
         ]
+    )
+
+    model.get_params.return_value = {
+        "n_estimators": 100,
+        "max_depth": 6,
+    }
+
+    return model
+
+
+@pytest.fixture
+def serializable_model() -> DummyClassifier:
+    """
+    Return a fitted sklearn model that can be serialized.
+    """
+
+    model = DummyClassifier(
+        strategy="most_frequent",
+    )
+
+    model.fit(
+        [[0], [1]],
+        [0, 1],
     )
 
     return model
 
 
 @pytest.fixture
-def mock_processed_data() -> Mock:
+def mock_processed_data():
     """
-    Return processed test data.
+    Return a fully populated ProcessedData instance.
     """
 
-    processed = Mock()
+    preprocessor = MagicMock()
 
-    processed.X_test_processed = np.array(
+    preprocessor.get_feature_names_out.return_value = np.array(
         [
-            [1.0, 2.0],
-            [3.0, 4.0],
+            "A",
+            "B",
         ]
     )
 
-    processed.y_test = np.array(
-        [
-            1,
-            0,
-        ]
+    return ProcessedData(
+        X_train=pd.DataFrame(
+            {
+                "A": [1, 2],
+                "B": [3, 4],
+            }
+        ),
+        X_test=pd.DataFrame(
+            {
+                "A": [5, 6],
+                "B": [7, 8],
+            }
+        ),
+        X_train_processed=np.array(
+            [
+                [1.0, 3.0],
+                [2.0, 4.0],
+            ]
+        ),
+        X_test_processed=np.array(
+            [
+                [5.0, 7.0],
+                [6.0, 8.0],
+            ]
+        ),
+        y_train=pd.Series([0, 1]),
+        y_test=pd.Series([1, 0]),
+        preprocessor=preprocessor,
+        feature_names=[
+            "A",
+            "B",
+        ],
+        numerical_columns=[
+            "A",
+        ],
+        categorical_columns=[
+            "B",
+        ],
+        high_value_threshold=5000.0,
     )
-
-    return processed
 
 
 @pytest.fixture
@@ -171,16 +227,41 @@ def sample_feature_names() -> list[str]:
 
 @pytest.fixture
 def mock_inference_artifacts(
-    sample_feature_names,
+    mock_model,
+    mock_processed_data,
 ) -> InferenceArtifacts:
     """
-    Return inference artifacts.
+    Return inference artifacts for testing.
     """
 
     return InferenceArtifacts(
-        model=DummyClassifier(strategy="most_frequent"),
-        preprocessor=StandardScaler(),
-        feature_names=sample_feature_names,
+        model=mock_model,
+        preprocessor=mock_processed_data.preprocessor,
+        feature_names=mock_processed_data.feature_names,
+        high_value_threshold=mock_processed_data.high_value_threshold,
+    )
+
+
+@pytest.fixture
+def serializable_inference_artifacts(
+    serializable_model,
+):
+    """
+    Return fully serializable inference artifacts.
+    """
+
+    preprocessor = StandardScaler()
+    preprocessor.fit(
+        [
+            [0.0, 0.0],
+            [1.0, 1.0],
+        ]
+    )
+
+    return InferenceArtifacts(
+        model=serializable_model,
+        preprocessor=preprocessor,
+        feature_names=["A", "B"],
         high_value_threshold=5000.0,
     )
 
@@ -395,8 +476,6 @@ def create_saved_artifacts(
 
     return _create
 
-
-from pathlib import Path
 
 @pytest.fixture
 def mock_training_result(
