@@ -16,3 +16,8 @@ shap
 ipykernel
 pydantic>=2.0
 httpx
+ruff
+black
+isort
+mypy
+pre-commit

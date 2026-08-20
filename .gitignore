@@ -6,6 +6,7 @@ __pycache__/
 *.pyc
 *.py[cod]
 *$py.class
+*.pyo
 
 
 # ---Python build/package files---
@@ -61,6 +62,7 @@ mlflow.db
 .pytest_cache/
 .coverage
 htmlcov/
+coverage.xml
 
 # --- OS ---
 .DS_Store
