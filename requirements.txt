@@ -1,23 +1,40 @@
-numpy
-pandas
-scikit-learn
-xgboost
-matplotlib
-seaborn
-fastapi
-uvicorn
-mlflow
-python-dotenv
-pyyaml
-joblib
-pytest
-pytest-cov
-shap
-ipykernel
-pydantic>=2.0
-httpx
-ruff
-black
-isort
-mypy
-pre-commit
+# Core Data Science
+numpy>=2.0,<3.0
+pandas>=2.2,<3.0
+scikit-learn>=1.6,<2.0
+xgboost>=3.0,<4.0
+joblib>=1.5,<2.0
+
+# Visualization
+matplotlib>=3.10,<4.0
+seaborn>=0.13,<1.0
+shap>=0.49,<1.0
+
+# API
+fastapi>=0.116,<1.0
+uvicorn>=0.35,<1.0
+httpx>=0.28,<1.0
+
+# Experiment Tracking
+mlflow>=3.3,<4.0
+
+# Configuration
+python-dotenv>=1.1,<2.0
+PyYAML>=6.0,<7.0
+pydantic>=2.11,<3.0
+
+# Development & Testing
+pytest>=9.1,<10.0
+pytest-cov>=7.0,<8.0
+
+black>=25.1,<26.0
+ruff>=0.12,<1.0
+isort>=6.0,<7.0
+mypy>=1.17,<2.0
+pre-commit>=4.3,<5.0
+
+# Type Stubs
+types-PyYAML
+
+# Notebook Support
+ipykernel>=6.30,<7.0
