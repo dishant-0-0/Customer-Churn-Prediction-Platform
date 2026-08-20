@@ -3,10 +3,13 @@ Tests for the training pipeline.
 """
 
 from __future__ import annotations
+
 from pathlib import Path
 from unittest.mock import MagicMock, patch
+
 import numpy as np
 import pandas as pd
+
 from src.core import (
     InferenceArtifacts,
     ProcessedData,
@@ -16,7 +19,6 @@ from src.pipelines.training_pipeline import (
     prepare_training_data,
     run_training_pipeline,
 )
-
 
 
 @patch("src.pipelines.training_pipeline.clean_feature_names")
@@ -153,19 +155,13 @@ def test_run_training_pipeline(
 
     model = MagicMock()
 
-    mock_prepare_training_data.return_value = (
-        mock_processed_data
-    )
+    mock_prepare_training_data.return_value = mock_processed_data
 
     mock_get_model.return_value = model
     mock_train_model.return_value = model
-    mock_evaluate_model.return_value = (
-        mock_evaluation_result
-    )
+    mock_evaluate_model.return_value = mock_evaluation_result
 
-    mock_save_artifacts.return_value = Path(
-        "artifacts/xgboost_v1"
-    )
+    mock_save_artifacts.return_value = Path("artifacts/xgboost_v1")
 
     mock_generate_explanation.return_value = MagicMock()
 

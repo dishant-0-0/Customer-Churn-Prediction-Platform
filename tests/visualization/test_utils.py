@@ -69,9 +69,7 @@ def test_finalize_figure_after_plot():
 
     assert returned is figure
 
-    assert len(
-        returned.axes
-    ) == 1
+    assert len(returned.axes) == 1
 
 
 def test_create_multiple_figures():

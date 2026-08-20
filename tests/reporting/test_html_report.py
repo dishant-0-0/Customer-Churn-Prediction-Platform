@@ -62,15 +62,9 @@ def test_build_metrics_table(
     assert "ROC AUC" in html
     assert "Average Precision" in html
 
-    assert (
-        f"{mock_training_result.evaluation.accuracy:.4f}"
-        in html
-    )
+    assert f"{mock_training_result.evaluation.accuracy:.4f}" in html
 
-    assert (
-        f"{mock_training_result.evaluation.precision:.4f}"
-        in html
-    )
+    assert f"{mock_training_result.evaluation.precision:.4f}" in html
 
 
 def test_build_figures():
@@ -144,12 +138,6 @@ def test_generate_html_report(
     assert "Performance" in html
     assert "Visualizations" in html
 
-    assert (
-        f"{mock_training_result.evaluation.accuracy:.4f}"
-        in html
-    )
+    assert f"{mock_training_result.evaluation.accuracy:.4f}" in html
 
-    assert (
-        f"{mock_training_result.evaluation.precision:.4f}"
-        in html
-    )
+    assert f"{mock_training_result.evaluation.precision:.4f}" in html

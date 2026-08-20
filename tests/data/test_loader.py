@@ -3,8 +3,10 @@ Tests for data loader utilities.
 """
 
 from __future__ import annotations
+
 import pandas as pd
 import pytest
+
 from src.data.loader import (
     DATA_STAGE_MAP,
     load_data,
@@ -22,6 +24,7 @@ def test_load_data_invalid_stage():
             stage="invalid",
             filename="customers.csv",
         )
+
 
 def test_load_data_missing_file(
     tmp_path,
@@ -74,7 +77,7 @@ def test_save_data(
 
     assert saved_file.exists()
 
-    
+
 def test_load_data(
     sample_dataframe,
     tmp_path,

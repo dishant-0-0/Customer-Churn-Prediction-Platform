@@ -13,7 +13,6 @@ from src.api.app import app
 from src.config.config import settings
 from src.core import PredictionResult
 
-
 client = TestClient(app)
 
 
@@ -66,9 +65,7 @@ def test_predict(
     Prediction endpoint should return prediction result.
     """
 
-    mock_get_artifacts.return_value = (
-        mock_inference_artifacts
-    )
+    mock_get_artifacts.return_value = mock_inference_artifacts
 
     mock_run_pipeline.return_value = PredictionResult(
         predictions=np.array([1]),
@@ -134,4 +131,3 @@ def test_predict_validation_error(
     )
 
     assert response.status_code == 422
-

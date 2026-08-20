@@ -3,6 +3,7 @@ Shared FastAPI dependencies.
 """
 
 from __future__ import annotations
+
 from src.core import InferenceArtifacts
 from src.persistence.load import load_artifacts
 from src.utils.logger import get_logger
@@ -36,8 +37,6 @@ def get_inference_artifacts() -> InferenceArtifacts:
     """
 
     if _artifacts is None:
-        raise RuntimeError(
-            "Inference artifacts have not been initialized."
-        )
+        raise RuntimeError("Inference artifacts have not been initialized.")
 
     return _artifacts

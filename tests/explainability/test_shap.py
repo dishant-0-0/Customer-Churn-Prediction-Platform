@@ -70,10 +70,7 @@ def test_generate_explanation(
         ExplainabilityResult,
     )
 
-    assert (
-        result.explanation
-        is explanation
-    )
+    assert result.explanation is explanation
 
 
 @patch("src.explainability.shap.shap.Explainer")
@@ -136,7 +133,4 @@ def test_generate_explanation_returns_same_object(
         ),
     )
 
-    assert (
-        result.explanation
-        is explanation
-    )
+    assert result.explanation is explanation

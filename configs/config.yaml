@@ -20,7 +20,7 @@ feature_engineering:
   - Monthly Charges
   - Total Charges
   - CLTV
-  
+
   drop_columns:
   - CustomerID
   - Count
@@ -51,7 +51,7 @@ feature_engineering:
   high_value_strategy: median
 
 training:
-  model: 
+  model:
     name: xgboost
     params:
       random_state: 42
@@ -81,11 +81,11 @@ tracking:
 visualization:
   style: seaborn-v0_8
   dpi: 150
-  
+
   figsize:
-    width: 6 
+    width: 6
     height: 5
-  
+
   font:
     title_size: 14
     label_size: 12
@@ -94,7 +94,7 @@ visualization:
   confusion_matrix:
     cmap: Blues
     annot: true
-  
+
   roc_curve:
     color: "#1f77b4"
     linewidth: 2

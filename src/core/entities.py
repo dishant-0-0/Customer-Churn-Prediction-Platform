@@ -3,13 +3,16 @@ Data models used throughout the ML pipeline.
 """
 
 from __future__ import annotations
+
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
+
 import numpy as np
 import pandas as pd
-from pathlib import Path
-from sklearn.compose import ColumnTransformer
 from sklearn.base import BaseEstimator
+from sklearn.compose import ColumnTransformer
+
 
 @dataclass(frozen=True, slots=True)
 class ProcessedData:
@@ -20,16 +23,16 @@ class ProcessedData:
     ----------
     X_train : pd.DataFrame
         Training features before preprocessing.
-    
+
     X_test : pd.DataFrame
         Testing features before preprocessing.
 
     X_train_processed : np.ndarray
         Processed training features.
-    
+
     X_test_processed : np.ndarray
         Processed testing features.
-    
+
     y_train: pd.Series
         Training target.
 
@@ -71,12 +74,12 @@ class ProcessedData:
 class EvaluationResult:
     """
     Container for model evaluation results.
-    
+
     Attributes
     ----------
     y_pred : np.ndarray
         Predicted class labels.
-    
+
     y_prob: np.ndarray
         Predicted probabilities for the positive class.
 
@@ -138,7 +141,7 @@ class InferenceArtifacts:
     ----------
     model: BaseEstimator
         Trained model.
-    
+
     preprocessor: ColumnTransformer
         Fitted preprocessing pipeline.
 
@@ -155,7 +158,7 @@ class InferenceArtifacts:
     high_value_threshold: float
 
 
-@dataclass(frozen=True, slots= True)
+@dataclass(frozen=True, slots=True)
 class TrainingResult:
     """
     Output of the complete training workflow.
@@ -195,7 +198,7 @@ class ExplainabilityResult:
     explanation: Any
 
 
-@dataclass(frozen=True, slots= True)
+@dataclass(frozen=True, slots=True)
 class PredictionResult:
     """
     Prediction results.

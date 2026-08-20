@@ -3,23 +3,26 @@ Model evaludation utilities.
 """
 
 from __future__ import annotations
+
 from sklearn.base import BaseEstimator
 from sklearn.metrics import (
     accuracy_score,
+    average_precision_score,
     confusion_matrix,
-    precision_score,
     f1_score,
+    precision_recall_curve,
+    precision_score,
     recall_score,
     roc_auc_score,
     roc_curve,
-    average_precision_score,
-    precision_recall_curve
 )
+
 from src.config.config import settings
-from src.core import ProcessedData, EvaluationResult
+from src.core import EvaluationResult, ProcessedData
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
+
 
 def evaluate_model(
     processed: ProcessedData,
@@ -54,26 +57,28 @@ def evaluate_model(
 
     fpr, tpr, thresholds = roc_curve(processed.y_test, y_prob)
 
-    average_precision = average_precision_score(processed.y_test,y_prob)
+    average_precision = average_precision_score(processed.y_test, y_prob)
 
-    precision_curve, recall_curve, pr_thresholds = (precision_recall_curve(processed.y_test, y_pred))
+    precision_curve, recall_curve, pr_thresholds = precision_recall_curve(
+        processed.y_test, y_pred
+    )
 
     logger.info("Evaluation completed successfully.")
 
     return EvaluationResult(
-        y_pred= y_pred,
+        y_pred=y_pred,
         y_prob=y_prob,
-        accuracy= accuracy,
-        precision = precision,
-        recall= recall,
-        f1= f1,
-        roc_auc= roc_auc,
-        confusion_matrix= cm,
+        accuracy=accuracy,
+        precision=precision,
+        recall=recall,
+        f1=f1,
+        roc_auc=roc_auc,
+        confusion_matrix=cm,
         fpr=fpr,
         tpr=tpr,
-        roc_thresholds= thresholds,
+        roc_thresholds=thresholds,
         precision_curve=precision_curve,
         recall_curve=recall_curve,
-        average_precision= average_precision,
-        pr_thresholds=pr_thresholds
+        average_precision=average_precision,
+        pr_thresholds=pr_thresholds,
     )

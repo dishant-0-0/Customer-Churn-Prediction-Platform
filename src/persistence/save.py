@@ -3,19 +3,22 @@ Persistence utilities for deployment artifacts.
 """
 
 from __future__ import annotations
-import json, shutil, joblib
+
+import json
+import shutil
 from pathlib import Path
-from src.config.config import settings
-from src.config.paths import (
-    ARTIFACTS_DIR,
-    CONFIG_DIR
-)
-from src.core import InferenceArtifacts, EvaluationResult
-from src.utils.logger import get_logger
-from matplotlib.figure import Figure
+
+import joblib
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+
+from src.config.config import settings
+from src.config.paths import ARTIFACTS_DIR, CONFIG_DIR
+from src.core import EvaluationResult, InferenceArtifacts
+from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
+
 
 def get_experiment_dir() -> Path:
     """
@@ -23,11 +26,11 @@ def get_experiment_dir() -> Path:
     """
 
     experiment_name = (
-        f"{settings.training.model.name}_"
-        f"{settings.artifacts.version}"
+        f"{settings.training.model.name}_{settings.artifacts.version}"
     )
 
     return ARTIFACTS_DIR / experiment_name
+
 
 def get_experiment_paths() -> dict[str, Path]:
     """
@@ -60,10 +63,7 @@ def _save_json(
         )
 
 
-def save_artifacts(
-    artifacts: InferenceArtifacts,
-    force: bool = False
-) -> Path:
+def save_artifacts(artifacts: InferenceArtifacts, force: bool = False) -> Path:
     """
     Save deployment artifacts.
     """
@@ -75,18 +75,14 @@ def save_artifacts(
 
     if experiment_dir.exists():
         if force:
-            logger.warning(
-                f"Overwriting existing experiment."
-            )
+            logger.warning("Overwriting existing experiment.")
             shutil.rmtree(experiment_dir)
-        else: 
-            raise FileExistsError(
-                f"Experiment already exists."
-            )
+        else:
+            raise FileExistsError("Experiment already exists.")
 
     for directory in directories.values():
         directory.mkdir(
-            parents= True,
+            parents=True,
             exist_ok=True,
         )
 
@@ -96,8 +92,7 @@ def save_artifacts(
     )
 
     joblib.dump(
-        artifacts.preprocessor,
-        directories["model"] / "preprocessor.joblib"
+        artifacts.preprocessor, directories["model"] / "preprocessor.joblib"
     )
 
     _save_json(
@@ -114,7 +109,7 @@ def save_artifacts(
 
     shutil.copy2(
         CONFIG_DIR / settings.files.config_file,
-        directories["model"] / settings.files.config_file
+        directories["model"] / settings.files.config_file,
     )
 
     logger.info(f"Artifacts saved to '{experiment_dir}'.")
@@ -122,9 +117,7 @@ def save_artifacts(
     return experiment_dir
 
 
-def save_metrics(
-    evaluation: EvaluationResult
-) -> Path:
+def save_metrics(evaluation: EvaluationResult) -> Path:
     """
     Save evaluation metrics as JSON.
     """
@@ -138,13 +131,10 @@ def save_metrics(
         "recall": evaluation.recall,
         "f1": evaluation.f1,
         "roc_auc": evaluation.roc_auc,
-        "average_precision": evaluation.average_precision
+        "average_precision": evaluation.average_precision,
     }
 
-    _save_json(
-        metrics,
-        output_path
-    )
+    _save_json(metrics, output_path)
 
     logger.info(f"Saved metrics to '{output_path}'.")
 
@@ -176,6 +166,7 @@ def save_figure(
 
     return output_path
 
+
 def save_figures(
     figures: dict[str, Figure],
 ) -> list[Path]:
@@ -188,11 +179,7 @@ def save_figures(
     saved_paths: list[Path] = []
 
     for name, figure in figures.items():
-
-        output_path = (
-            paths["figures"] /
-            f"{name}.png"
-        )
+        output_path = paths["figures"] / f"{name}.png"
 
         save_figure(
             figure,

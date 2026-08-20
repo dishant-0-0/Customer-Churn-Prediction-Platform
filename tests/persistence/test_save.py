@@ -3,15 +3,17 @@ Tests for persistence save utilities.
 """
 
 from __future__ import annotations
+
 import matplotlib
 
 matplotlib.use("Agg")
 
 import json
+
 import matplotlib.pyplot as plt
 import pytest
-from src.persistence import save
 
+from src.persistence import save
 
 
 def test_get_experiment_dir(
@@ -59,10 +61,7 @@ def test_save_artifacts(
     ) as file:
         feature_names = json.load(file)
 
-    assert (
-        feature_names
-        == serializable_inference_artifacts.feature_names
-    )
+    assert feature_names == serializable_inference_artifacts.feature_names
 
     with (model_dir / "metadata.json").open(
         encoding="utf-8",
@@ -116,31 +115,14 @@ def test_save_metrics(
 
     assert output.exists()
 
-    with output.open(
-        encoding="utf-8"
-    ) as file:
+    with output.open(encoding="utf-8") as file:
         metrics = json.load(file)
 
-    assert (
-        metrics["accuracy"]
-        == mock_evaluation_result.accuracy
-    )
-    assert (
-        metrics["precision"]
-        == mock_evaluation_result.precision
-    )
-    assert (
-        metrics["recall"]
-        == mock_evaluation_result.recall
-    )
-    assert (
-        metrics["f1"]
-        == mock_evaluation_result.f1
-    )
-    assert (
-        metrics["roc_auc"]
-        == mock_evaluation_result.roc_auc
-    )
+    assert metrics["accuracy"] == mock_evaluation_result.accuracy
+    assert metrics["precision"] == mock_evaluation_result.precision
+    assert metrics["recall"] == mock_evaluation_result.recall
+    assert metrics["f1"] == mock_evaluation_result.f1
+    assert metrics["roc_auc"] == mock_evaluation_result.roc_auc
     assert (
         metrics["average_precision"]
         == mock_evaluation_result.average_precision

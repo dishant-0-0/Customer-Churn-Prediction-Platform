@@ -3,9 +3,11 @@ Tests for the inference pipeline.
 """
 
 from __future__ import annotations
+
 from unittest.mock import patch
+
 import numpy as np
-import pandas as pd
+
 from src.config.config import settings
 from src.core import PredictionResult
 from src.pipelines.inference_pipeline import (
@@ -51,9 +53,7 @@ def test_run_inference_pipeline(
 
     mock_feature_engineering.assert_called_once_with(
         df=sample_prediction_dataframe,
-        high_value_threshold=(
-            mock_inference_artifacts.high_value_threshold
-        ),
+        high_value_threshold=(mock_inference_artifacts.high_value_threshold),
     )
 
     mock_predict_proba.assert_called_once_with(
@@ -61,7 +61,6 @@ def test_run_inference_pipeline(
         preprocessor=mock_inference_artifacts.preprocessor,
         X=engineered,
     )
-
 
     np.testing.assert_array_equal(
         result.probabilities,

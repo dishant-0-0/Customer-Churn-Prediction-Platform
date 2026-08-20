@@ -3,6 +3,7 @@ Module for creating ML model from configurations.
 """
 
 from __future__ import annotations
+
 from sklearn.base import BaseEstimator
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -18,6 +19,7 @@ MODEL_REGISTRY: dict[str, type[BaseEstimator]] = {
     "random_forest": RandomForestClassifier,
     "xgboost": XGBClassifier,
 }
+
 
 def get_model() -> BaseEstimator:
     """

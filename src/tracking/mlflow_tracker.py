@@ -3,22 +3,21 @@ MLflow experiment tracking.
 """
 
 from __future__ import annotations
-from pathlib import Path
+
 import mlflow
 import mlflow.sklearn
 import mlflow.xgboost
 from xgboost import XGBClassifier
+
 from src.config.config import settings
+from src.config.paths import PROJECT_ROOT
 from src.core import TrainingResult
 from src.utils.logger import get_logger
-from src.config.paths import PROJECT_ROOT
 
 logger = get_logger(__name__)
 
 
-def _log_parameters(
-    training_result: TrainingResult
-) -> None:
+def _log_parameters(training_result: TrainingResult) -> None:
     """
     Log experiment parameters.
     """
@@ -37,9 +36,7 @@ def _log_parameters(
     mlflow.log_params(params)
 
 
-def _log_metrics(
-    training_result: TrainingResult
-) -> None:
+def _log_metrics(training_result: TrainingResult) -> None:
     """
     Log evaluation metrics.
     """
@@ -55,7 +52,7 @@ def _log_metrics(
             "recall": evaluation.recall,
             "f1": evaluation.f1,
             "roc_auc": evaluation.roc_auc,
-            "average_precision": evaluation.average_precision
+            "average_precision": evaluation.average_precision,
         }
     )
 
@@ -76,15 +73,10 @@ def _log_model(
         )
         return
 
-    mlflow.sklearn.log_model(
-        sk_model= training_result.model,
-        name= "model"
-    )
+    mlflow.sklearn.log_model(sk_model=training_result.model, name="model")
 
 
-def _log_artifacts(
-    training_result: TrainingResult
-) -> None:
+def _log_artifacts(training_result: TrainingResult) -> None:
     """
     Log experiment artifacts.
     """
@@ -93,14 +85,10 @@ def _log_artifacts(
 
     artifact_root = training_result.artifacts_path
 
-    for directory in (
-        "metrics",
-        "figures",
-        "reports"
-    ):
+    for directory in ("metrics", "figures", "reports"):
         mlflow.log_artifact(
-            artifact_root / directory,
-            artifact_path= directory,
+            str(artifact_root / directory),
+            artifact_path=directory,
         )
 
 
@@ -131,14 +119,12 @@ def _set_tags() -> None:
             "project": "Customer Chrun Prediction",
             "model": settings.training.model.name,
             "version": settings.artifacts.version,
-            "author": "Dishant Patel"
+            "author": "Dishant Patel",
         }
     )
 
 
-def log_experiment(
-    training_result: TrainingResult
-) -> None:
+def log_experiment(training_result: TrainingResult) -> None:
     """
     Log a training run to MLflow.
     """
@@ -153,21 +139,14 @@ def log_experiment(
 
     mlflow.set_tracking_uri(tracking_uri)
 
-    mlflow.set_experiment(
-        settings.tracking.experiment_name
-    )
+    mlflow.set_experiment(settings.tracking.experiment_name)
 
-    logger.info(
-        f"MLflow experiment: '{settings.tracking.experiment_name}'"
-    )
-    logger.info(
-        f"Tracking URI: {tracking_uri}"
-    )
+    logger.info(f"MLflow experiment: '{settings.tracking.experiment_name}'")
+    logger.info(f"Tracking URI: {tracking_uri}")
 
     with mlflow.start_run(
         run_name=f"{settings.training.model.name}_{settings.artifacts.version}"
     ):
-
         _log_parameters(training_result)
 
         _log_metrics(training_result)

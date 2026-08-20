@@ -3,8 +3,13 @@ Utilities for loading deployment artifacts.
 """
 
 from __future__ import annotations
-import json, joblib
+
+import json
 from pathlib import Path
+from typing import Any, cast
+
+import joblib
+
 from src.config.config import settings
 from src.config.paths import ARTIFACTS_DIR
 from src.core import InferenceArtifacts
@@ -15,7 +20,7 @@ logger = get_logger(__name__)
 
 def _load_json(
     input_path: Path,
-) -> dict | list:
+) -> dict[str, Any] | list[Any]:
     """
     Load JSON data from disk.
     """
@@ -24,8 +29,11 @@ def _load_json(
         "r",
         encoding="utf-8",
     ) as file:
-        return json.load(file)
-    
+        return cast(
+            dict[str, Any] | list[Any],
+            json.load(file),
+        )
+
 
 def load_artifacts(
     experiment_name: str | None = None,
@@ -35,7 +43,9 @@ def load_artifacts(
     """
 
     if experiment_name is None:
-        experiment_name = f"{settings.training.model.name}_{settings.artifacts.version}"
+        experiment_name = (
+            f"{settings.training.model.name}_{settings.artifacts.version}"
+        )
 
     experiment_dir = ARTIFACTS_DIR / experiment_name
     model_dir = experiment_dir / "model"
@@ -55,36 +65,30 @@ def load_artifacts(
     for artifact_name, artifact_path in required_files.items():
         if not artifact_path.exists():
             raise FileNotFoundError(
-                f"Required artifact '{artifact_name}' not found: {artifact_path}"
+                f"Required artifact '{artifact_name}' "
+                f"not found: {artifact_path}"
             )
 
-    logger.info(
-        f"Loading artifacts from '{experiment_dir}'."
+    logger.info(f"Loading artifacts from '{experiment_dir}'.")
+
+    model = joblib.load(required_files["model"])
+
+    preprocessor = joblib.load(required_files["preprocessor"])
+
+    metadata = cast(
+        dict[str, Any],
+        _load_json(required_files["metadata"]),
     )
 
-    model = joblib.load(
-        required_files["model"]
+    feature_names = cast(
+        list[str], _load_json(required_files["feature_names"])
     )
 
-    preprocessor = joblib.load(
-        required_files["preprocessor"]
-    )
-
-    metadata = _load_json(
-        required_files["metadata"]
-    )
-
-    feature_names = _load_json(
-        required_files["feature_names"]
-    )
-
-    logger.info(
-        f"Artifacts loaded successfully from '{experiment_dir}'."
-    )
+    logger.info(f"Artifacts loaded successfully from '{experiment_dir}'.")
 
     return InferenceArtifacts(
-        model= model,
-        preprocessor= preprocessor,
-        feature_names= feature_names,
-        high_value_threshold= metadata["high_value_threshold"]
+        model=model,
+        preprocessor=preprocessor,
+        feature_names=feature_names,
+        high_value_threshold=metadata["high_value_threshold"],
     )

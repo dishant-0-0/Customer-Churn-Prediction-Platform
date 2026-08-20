@@ -3,25 +3,22 @@ SHAP summary visualization.
 """
 
 from __future__ import annotations
+
 import matplotlib.pyplot as plt
 import shap
 from matplotlib.figure import Figure
+
 from src.core import ExplainabilityResult
 from src.visualization._utils import finalize_figure
 
 
-def create_shap_summary(
-    explanation: ExplainabilityResult
-) -> Figure:
+def create_shap_summary(explanation: ExplainabilityResult) -> Figure:
     """
     Create a SHAP beeswam summary plot.
     """
 
     plt.figure()
-    shap.plots.beeswarm(
-        explanation.explanation,
-        show= False
-    )
+    shap.plots.beeswarm(explanation.explanation, show=False)
 
     fig = plt.gcf()
 

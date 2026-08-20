@@ -4,8 +4,6 @@ Tests for prediction utilities.
 
 from __future__ import annotations
 
-from unittest.mock import Mock
-
 import numpy as np
 import pytest
 
@@ -146,7 +144,6 @@ def test_predict_proba_missing_method(
         pass
 
     with pytest.raises(AttributeError):
-
         predict_proba(
             model=DummyModel(),
             preprocessor=mock_preprocessor,

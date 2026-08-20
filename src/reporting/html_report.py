@@ -3,8 +3,10 @@ Generate HTML experiment report.
 """
 
 from __future__ import annotations
+
 from datetime import datetime
 from pathlib import Path
+
 from src.config.config import settings
 from src.core import TrainingResult
 from src.persistence.save import get_experiment_paths
@@ -73,7 +75,12 @@ def _build_experiment_section() -> str:
 
         <tr><th>Version</th><td>{settings.artifacts.version}</td></tr>
 
-        <tr><th>Generated</th><td>{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</td></tr>
+        <tr>
+        <th>Generated</th>
+        <td>
+        {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+        </td>
+        </tr>
 
         <tr><th>Threshold</th><td>{settings.evaluation.threshold}</td></tr>
 
@@ -84,7 +91,6 @@ def _build_experiment_section() -> str:
 def _build_metrics_table(
     training_result: TrainingResult,
 ) -> str:
-
     evaluation = training_result.evaluation
 
     return f"""
@@ -102,14 +108,18 @@ def _build_metrics_table(
 
         <tr><th>ROC AUC</th><td>{evaluation.roc_auc:.4f}</td></tr>
 
-        <tr><th>Average Precision</th><td>{evaluation.average_precision:.4f}</td></tr>
+        <tr>
+        <th>
+        Average Precision
+        </th>
+        <td>{evaluation.average_precision:.4f}</td>
+        </tr>
 
     </table>
     """
 
 
 def _build_figures() -> str:
-
     figures = [
         "roc_curve",
         "precision_recall_curve",
@@ -121,7 +131,6 @@ def _build_figures() -> str:
     html = "<h2>Visualizations</h2>"
 
     for figure in figures:
-
         html += f"""
         <h3>{figure.replace("_", " ").title()}</h3>
 
@@ -135,7 +144,6 @@ def _build_figures() -> str:
 
 
 def _build_footer() -> str:
-
     return """
     <hr>
 
@@ -149,9 +157,7 @@ def _build_footer() -> str:
     """
 
 
-def generate_html_report(
-    training_result: TrainingResult
-) -> Path:
+def generate_html_report(training_result: TrainingResult) -> Path:
     """
     Generate an HTML report for a training run.
     """
@@ -160,10 +166,7 @@ def generate_html_report(
 
     paths = get_experiment_paths()
 
-    report_path = (
-        paths["reports"] /
-        "report.html"
-    )
+    report_path = paths["reports"] / "report.html"
 
     html = (
         _build_header()
@@ -175,10 +178,7 @@ def generate_html_report(
 
     logger.info(f"Writing HTML report to '{report_path}'.")
 
-    report_path.write_text(
-        html,
-        encoding="utf-8"
-    )
+    report_path.write_text(html, encoding="utf-8")
 
     logger.info("HTML report generated successfully.")
 

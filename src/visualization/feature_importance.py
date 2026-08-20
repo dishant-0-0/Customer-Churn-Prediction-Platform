@@ -1,15 +1,13 @@
 """Reusable charts for interpreting trained models."""
 
 from collections.abc import Sequence
-from src.visualization._utils import(
-    create_figure,
-    finalize_figure
-)
-import matplotlib.pyplot as plt
-from src.utils.feature_names import clean_feature_names
+
+from src.visualization._utils import create_figure, finalize_figure
 
 
-def create_feature_importance(model, feature_names: Sequence[str], top_n: int = 20):
+def create_feature_importance(
+    model, feature_names: Sequence[str], top_n: int = 20
+):
     """Plot the most important features exposed by a fitted tree-based model.
 
     Returns the matplotlib axes containing the chart.
@@ -24,7 +22,8 @@ def create_feature_importance(model, feature_names: Sequence[str], top_n: int = 
     feature_importances = model.feature_importances_
     if len(feature_names) != len(feature_importances):
         raise ValueError(
-            "feature_names and model.feature_importances_ must have the same length."
+            "feature_names and model.feature_importances_ "
+            "must have the same length."
         )
 
     ranked_features = sorted(

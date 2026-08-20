@@ -3,23 +3,25 @@ Shared pytest fixtures.
 """
 
 from __future__ import annotations
-import pandas as pd
-import numpy as np
-import pytest
+
 import json
+from pathlib import Path
+from unittest.mock import MagicMock, Mock
+
 import joblib
+import numpy as np
+import pandas as pd
+import pytest
 from sklearn.dummy import DummyClassifier
 from sklearn.preprocessing import StandardScaler
-from pathlib import Path
-from src.persistence import save, load
-from unittest.mock import Mock, MagicMock
-from src.core import (
-    InferenceArtifacts, 
-    EvaluationResult, 
-    TrainingResult,
-    ProcessedData
-)
 
+from src.core import (
+    EvaluationResult,
+    InferenceArtifacts,
+    ProcessedData,
+    TrainingResult,
+)
+from src.persistence import load, save
 
 SAMPLE_CUSTOMER = {
     "CustomerID": ["0001", "0002", "0003", "0004"],
@@ -64,6 +66,7 @@ SAMPLE_CUSTOMER = {
     "Churn Value": [1, 0, 1, 0],
 }
 
+
 @pytest.fixture
 def sample_dataframe() -> pd.DataFrame:
     """
@@ -75,7 +78,7 @@ def sample_dataframe() -> pd.DataFrame:
 
 @pytest.fixture
 def sample_prediction_dataframe(
-    sample_dataframe: pd.DataFrame
+    sample_dataframe: pd.DataFrame,
 ) -> pd.DataFrame:
     """
     Return sample data without the target column.
@@ -87,9 +90,7 @@ def sample_prediction_dataframe(
 
 
 @pytest.fixture
-def high_value_threshold(
-    sample_dataframe: pd.DataFrame
-) -> float:
+def high_value_threshold(sample_dataframe: pd.DataFrame) -> float:
     """
     Return the CLTV threshold.
     """
@@ -366,10 +367,7 @@ def patched_artifact_dirs(
         exist_ok=True,
     )
 
-    config_file = (
-        config_dir /
-        save.settings.files.config_file
-    )
+    config_file = config_dir / save.settings.files.config_file
 
     config_file.write_text(
         "dummy-config",
@@ -393,22 +391,15 @@ def create_saved_artifacts(
         feature_names: list[str] | None = None,
         high_value_threshold: float = 5000.0,
     ) -> tuple[str, Path]:
-
         if feature_names is None:
             feature_names = [
                 "A",
                 "B",
             ]
 
-        experiment_dir = (
-            patched_artifact_dirs /
-            experiment_name
-        )
+        experiment_dir = patched_artifact_dirs / experiment_name
 
-        model_dir = (
-            experiment_dir /
-            "model"
-        )
+        model_dir = experiment_dir / "model"
 
         model_dir.mkdir(
             parents=True,
@@ -440,31 +431,22 @@ def create_saved_artifacts(
             model_dir / "preprocessor.joblib",
         )
 
-        with (
-            model_dir /
-            "feature_names.json"
-        ).open(
+        with (model_dir / "feature_names.json").open(
             "w",
             encoding="utf-8",
         ) as file:
-
             json.dump(
                 feature_names,
                 file,
             )
 
-        with (
-            model_dir /
-            "metadata.json"
-        ).open(
+        with (model_dir / "metadata.json").open(
             "w",
             encoding="utf-8",
         ) as file:
-
             json.dump(
                 {
-                    "high_value_threshold":
-                        high_value_threshold,
+                    "high_value_threshold": high_value_threshold,
                 },
                 file,
             )

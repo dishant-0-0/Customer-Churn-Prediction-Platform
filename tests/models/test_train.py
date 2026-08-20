@@ -3,7 +3,9 @@ Tests for model training utilities.
 """
 
 from __future__ import annotations
+
 from unittest.mock import MagicMock
+
 from src.models.train import train_model
 
 

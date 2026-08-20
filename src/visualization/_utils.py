@@ -3,10 +3,13 @@ Shared visualization utilities.
 """
 
 from __future__ import annotations
+
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+
 from src.config.config import settings
+
 
 def create_figure() -> tuple[Figure, Axes]:
     """
@@ -14,19 +17,18 @@ def create_figure() -> tuple[Figure, Axes]:
     """
     plt.style.use(settings.visualization.style)
 
-    fig,ax = plt.subplots(
+    fig, ax = plt.subplots(
         figsize=(
             settings.visualization.figsize.width,
-            settings.visualization.figsize.height
+            settings.visualization.figsize.height,
         ),
-        dpi = settings.visualization.dpi
+        dpi=settings.visualization.dpi,
     )
 
     return fig, ax
 
-def finalize_figure(
-        fig:Figure
-) -> Figure:
+
+def finalize_figure(fig: Figure) -> Figure:
     """
     Apply final formatting before returning a figure.
     """

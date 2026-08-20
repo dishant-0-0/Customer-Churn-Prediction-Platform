@@ -3,19 +3,20 @@ Tests for model evaluation.
 """
 
 from __future__ import annotations
-from unittest.mock import Mock
+
 import numpy as np
 import pytest
-from src.config.config import settings
-from src.models.evaluate import evaluate_model
 from sklearn.metrics import (
-    confusion_matrix,
     accuracy_score,
+    confusion_matrix,
+    f1_score,
     precision_score,
     recall_score,
     roc_auc_score,
-    f1_score
 )
+
+from src.config.config import settings
+from src.models.evaluate import evaluate_model
 
 
 def test_evaluate_model(
@@ -133,7 +134,6 @@ def test_evaluate_model_without_predict_proba(
         pass
 
     with pytest.raises(AttributeError):
-
         evaluate_model(
             processed=mock_processed_data,
             model=DummyModel(),

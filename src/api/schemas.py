@@ -3,8 +3,11 @@ Pydantic schemas for Customer Churn Prediction API.
 """
 
 from __future__ import annotations
+
 from typing import Any
-from pydantic import BaseModel, Field, ConfigDict
+
+from pydantic import BaseModel, ConfigDict, Field
+
 from src.config.config import settings
 
 
@@ -15,7 +18,7 @@ class PredictionRequest(BaseModel):
 
     customer: dict[str, Any] = Field(
         ...,
-        description= "Raw customer features.",
+        description="Raw customer features.",
         examples=[
             {
                 "Gender": "Male",
@@ -40,13 +43,13 @@ class PredictionRequest(BaseModel):
                 "CLTV": 3520,
                 "City": "Los Angeles",
             }
-        ]
+        ],
     )
 
     model_config = ConfigDict(
         json_schema_extra={
-            "example":{
-                "customer":{
+            "example": {
+                "customer": {
                     "Gender": "Male",
                     "Senior Citizen": "No",
                     "Partner": "Yes",
@@ -73,59 +76,49 @@ class PredictionRequest(BaseModel):
         }
     )
 
+
 class PredictionResponse(BaseModel):
     """
     Response returned by prediction endpoints.
     """
 
-    prediction: int = Field(
-        ...,
-        description= "Prediction churn class."
-    )
+    prediction: int = Field(..., description="Prediction churn class.")
 
     probability: float = Field(
-        ...,
-        ge= 0.0,
-        le= 1.0,
-        description= "Prediction probability of churn."
+        ..., ge=0.0, le=1.0, description="Prediction probability of churn."
     )
 
     threshold: float = Field(
-        default= settings.evaluation.threshold,
-        description= "Decision threshold used for prediciton."
+        default=settings.evaluation.threshold,
+        description="Decision threshold used for prediciton.",
     )
+
 
 class HealthResponse(BaseModel):
     """
     API health status.
     """
+
     status: str = "healthy"
+
 
 class RootResponse(BaseModel):
     """
     Root endpoint response.
     """
 
-    name:str
+    name: str
     version: str
     model: str
+
 
 class ErrorResponse(BaseModel):
     """
     Standard API error response.
     """
 
-    error: str = Field(
-        ...,
-        description= "Error type."
-    )
+    error: str = Field(..., description="Error type.")
 
-    message: str = Field(
-        ...,
-        description= "Detailed error message"
-    )
+    message: str = Field(..., description="Detailed error message")
 
-    status_code: int = Field(
-        ...,
-        description= "HHTP status code."
-    )
+    status_code: int = Field(..., description="HHTP status code.")

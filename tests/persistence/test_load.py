@@ -3,10 +3,13 @@ Tests for persistence load utilities.
 """
 
 from __future__ import annotations
+
 import json
+
 import pytest
 from sklearn.dummy import DummyClassifier
 from sklearn.preprocessing import StandardScaler
+
 from src.persistence import load
 
 
@@ -60,10 +63,7 @@ def test_load_artifacts_missing_files(
     Missing artifact files should raise FileNotFoundError.
     """
 
-    experiment_dir = (
-        patched_artifact_dirs
-        / "missing_files"
-    )
+    experiment_dir = patched_artifact_dirs / "missing_files"
 
     model_dir = experiment_dir / "model"
 
@@ -85,10 +85,8 @@ def test_load_artifacts(
     Artifacts should be loaded successfully.
     """
 
-    experiment_name, experiment_dir = (
-        create_saved_artifacts(
-            experiment_name="test_experiment",
-        )
+    experiment_name, experiment_dir = create_saved_artifacts(
+        experiment_name="test_experiment",
     )
 
     artifacts = load.load_artifacts(
@@ -112,10 +110,7 @@ def test_load_artifacts(
         "B",
     ]
 
-    assert (
-        artifacts.high_value_threshold
-        == 5000.0
-    )
+    assert artifacts.high_value_threshold == 5000.0
 
 
 def test_load_artifacts_default_experiment_name(
@@ -144,10 +139,7 @@ def test_load_artifacts_default_experiment_name(
         "Monthly Charges",
     ]
 
-    assert (
-        artifacts.high_value_threshold
-        == 6000.0
-    )
+    assert artifacts.high_value_threshold == 6000.0
 
 
 def test_loaded_model_is_usable(
@@ -157,21 +149,15 @@ def test_loaded_model_is_usable(
     Loaded model and preprocessor should be usable.
     """
 
-    experiment_name, _ = (
-        create_saved_artifacts(
-            experiment_name="usable",
-        )
+    experiment_name, _ = create_saved_artifacts(
+        experiment_name="usable",
     )
 
     artifacts = load.load_artifacts(
         experiment_name=experiment_name,
     )
 
-    transformed = (
-        artifacts.preprocessor.transform(
-            [[0.5]]
-        )
-    )
+    transformed = artifacts.preprocessor.transform([[0.5]])
 
     prediction = artifacts.model.predict(
         transformed,

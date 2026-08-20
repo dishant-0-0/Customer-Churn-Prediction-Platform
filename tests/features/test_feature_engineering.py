@@ -3,18 +3,20 @@ Tests for feature engineering.
 """
 
 from __future__ import annotations
+
 import pandas as pd
 import pytest
+
 from src.features.feature_engineering import (
-    validate_dataframe,
-    drop_identifier_columns,
-    create_tenure_group,
-    create_total_services,
     create_avg_monthly_spend,
     create_high_value_customer,
     create_monthly_contract,
+    create_tenure_group,
+    create_total_services,
+    drop_identifier_columns,
     drop_location_columns,
     feature_engineering_pipeline,
+    validate_dataframe,
 )
 
 
@@ -24,9 +26,7 @@ def test_validate_dataframe_empty():
     """
 
     with pytest.raises(ValueError):
-        validate_dataframe(
-            pd.DataFrame()
-        )
+        validate_dataframe(pd.DataFrame())
 
 
 def test_validate_dataframe_missing_columns():
@@ -34,11 +34,7 @@ def test_validate_dataframe_missing_columns():
     Missing required columns should raise ValueError.
     """
 
-    df = pd.DataFrame(
-        {
-            "CustomerID": ["0001"]
-        }
-    )
+    df = pd.DataFrame({"CustomerID": ["0001"]})
 
     with pytest.raises(ValueError):
         validate_dataframe(df)
@@ -51,13 +47,9 @@ def test_validate_dataframe_success(
     Valid dataframe should pass validation.
     """
 
-    result = validate_dataframe(
-        sample_dataframe
-    )
+    result = validate_dataframe(sample_dataframe)
 
-    assert result.equals(
-        sample_dataframe
-    )
+    assert result.equals(sample_dataframe)
 
 
 def test_drop_identifier_columns(
@@ -67,9 +59,7 @@ def test_drop_identifier_columns(
     Identifier columns should be removed.
     """
 
-    result = drop_identifier_columns(
-        sample_dataframe
-    )
+    result = drop_identifier_columns(sample_dataframe)
 
     assert "CustomerID" not in result.columns
 
@@ -81,9 +71,7 @@ def test_create_total_services(
     Total services should be created.
     """
 
-    result = create_total_services(
-        sample_dataframe
-    )
+    result = create_total_services(sample_dataframe)
 
     assert "Total Services" in result.columns
     assert result["Total Services"].dtype == int
@@ -98,16 +86,12 @@ def test_create_monthly_contract(
     Monthly contract indicator should be created.
     """
 
-    result = create_monthly_contract(
-        sample_dataframe
-    )
+    result = create_monthly_contract(sample_dataframe)
 
     assert "Monthly Contract" in result.columns
     assert result.loc[0, "Monthly Contract"] == 1
     assert result.loc[1, "Monthly Contract"] == 0
-    assert result["Monthly Contract"].isin(
-        [0, 1]
-    ).all()
+    assert result["Monthly Contract"].isin([0, 1]).all()
 
 
 def test_create_avg_monthly_spend(
@@ -117,17 +101,11 @@ def test_create_avg_monthly_spend(
     Average monthly spend should be calculated correctly.
     """
 
-    result = create_avg_monthly_spend(
-        sample_dataframe
-    )
+    result = create_avg_monthly_spend(sample_dataframe)
 
     assert "Avg Monthly Spend" in result.columns
-    assert result.loc[0, "Avg Monthly Spend"] == pytest.approx(
-        966.0 / 13
-    )
-    assert result.loc[1, "Avg Monthly Spend"] == pytest.approx(
-        1980.0 / 37
-    )
+    assert result.loc[0, "Avg Monthly Spend"] == pytest.approx(966.0 / 13)
+    assert result.loc[1, "Avg Monthly Spend"] == pytest.approx(1980.0 / 37)
 
 
 def test_create_tenure_group(
@@ -161,7 +139,7 @@ def test_drop_location_columns(
     assert "Longitude" not in result.columns
     assert "Zip Code" not in result.columns
 
-    
+
 def test_create_high_value_customer(
     sample_dataframe,
     high_value_threshold,
@@ -178,9 +156,7 @@ def test_create_high_value_customer(
     assert "High Value Customer" in result.columns
     assert result.loc[0, "High Value Customer"] == 0
     assert result.loc[1, "High Value Customer"] == 1
-    assert result["High Value Customer"].isin(
-        [0, 1]
-    ).all()
+    assert result["High Value Customer"].isin([0, 1]).all()
 
 
 def test_feature_engineering_pipeline(
@@ -206,6 +182,4 @@ def test_feature_engineering_pipeline(
 
     assert len(result) == len(sample_dataframe)
     assert result.isnull().sum().sum() == 0
-    assert expected_columns.issubset(
-        result.columns
-    )
+    assert expected_columns.issubset(result.columns)

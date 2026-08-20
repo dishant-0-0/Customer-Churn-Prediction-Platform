@@ -4,7 +4,8 @@ Utilities for formatting feature names for presentation.
 
 from __future__ import annotations
 
-def clean_feature_name(name:str) -> str:
+
+def clean_feature_name(name: str) -> str:
     """
     Convert internal pipeline feature names into human-readable labels.
     """
@@ -25,14 +26,12 @@ def clean_feature_name(name:str) -> str:
 
     return name
 
+
 def clean_feature_names(
-        feature_names: list[str],
+    feature_names: list[str],
 ) -> list[str]:
     """
     Clean multiple feature names.
     """
 
-    return [
-        clean_feature_name(name)
-        for name in feature_names
-    ]
+    return [clean_feature_name(name) for name in feature_names]

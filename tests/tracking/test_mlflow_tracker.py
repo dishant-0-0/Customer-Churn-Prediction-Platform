@@ -5,7 +5,7 @@ Tests for MLflow experiment tracking.
 from __future__ import annotations
 
 from pathlib import Path
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import patch
 
 from xgboost import XGBClassifier
 
@@ -21,8 +21,7 @@ def test_get_tracking_uri_sqlite():
     uri = mlflow_tracker._get_tracking_uri()
 
     expected = (
-        "sqlite:///"
-        f"{(mlflow_tracker.PROJECT_ROOT / 'mlflow.db').as_posix()}"
+        f"sqlite:///{(mlflow_tracker.PROJECT_ROOT / 'mlflow.db').as_posix()}"
     )
 
     assert uri == expected
@@ -49,9 +48,7 @@ def test_log_parameters(
         mlflow_tracker.settings.evaluation.threshold
     )
 
-    assert params["target"] == (
-        mlflow_tracker.settings.data.target
-    )
+    assert params["target"] == (mlflow_tracker.settings.data.target)
 
 
 @patch("src.tracking.mlflow_tracker.mlflow.log_metrics")
@@ -71,15 +68,9 @@ def test_log_metrics(
 
     metrics = mock_log_metrics.call_args.args[0]
 
-    assert (
-        metrics["accuracy"]
-        == mock_training_result.evaluation.accuracy
-    )
+    assert metrics["accuracy"] == mock_training_result.evaluation.accuracy
 
-    assert (
-        metrics["roc_auc"]
-        == mock_training_result.evaluation.roc_auc
-    )
+    assert metrics["roc_auc"] == mock_training_result.evaluation.roc_auc
 
 
 @patch("src.tracking.mlflow_tracker.mlflow.sklearn.log_model")
@@ -146,27 +137,28 @@ def test_log_artifacts(
         mock_training_result,
     )
 
-    mock_log_artifact.assert_has_calls(
-        [
-            call(
-                mock_training_result.artifacts_path
-                / "metrics",
-                artifact_path="metrics",
-            ),
-            call(
-                mock_training_result.artifacts_path
-                / "figures",
-                artifact_path="figures",
-            ),
-            call(
-                mock_training_result.artifacts_path
-                / "reports",
-                artifact_path="reports",
-            ),
-        ]
-    )
-
     assert mock_log_artifact.call_count == 3
+
+    calls = mock_log_artifact.call_args_list
+
+    expected = [
+        ("metrics", "metrics"),
+        ("figures", "figures"),
+        ("reports", "reports"),
+    ]
+
+    for call_args, (directory, artifact_path) in zip(
+        calls,
+        expected,
+        strict=True,
+    ):
+        assert call_args.kwargs["artifact_path"] == artifact_path
+
+        logged_path = Path(call_args.args[0])
+
+        assert logged_path.name == directory
+
+        assert logged_path.parent == mock_training_result.artifacts_path
 
 
 @patch("src.tracking.mlflow_tracker.mlflow.set_tags")

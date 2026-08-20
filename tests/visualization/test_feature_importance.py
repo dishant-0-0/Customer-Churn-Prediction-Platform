@@ -8,9 +8,9 @@ import matplotlib
 
 matplotlib.use("Agg")
 
-from matplotlib.figure import Figure
 import numpy as np
 import pytest
+from matplotlib.figure import Figure
 
 from src.visualization.feature_importance import (
     create_feature_importance,
@@ -158,9 +158,7 @@ def test_create_feature_importance_top_n():
     axes = figure.axes[0]
 
     labels = [
-        tick.get_text()
-        for tick in axes.get_yticklabels()
-        if tick.get_text()
+        tick.get_text() for tick in axes.get_yticklabels() if tick.get_text()
     ]
 
     assert len(labels) == 2
@@ -191,9 +189,7 @@ def test_create_feature_importance_sorted():
     axes = figure.axes[0]
 
     labels = [
-        tick.get_text()
-        for tick in axes.get_yticklabels()
-        if tick.get_text()
+        tick.get_text() for tick in axes.get_yticklabels() if tick.get_text()
     ]
 
     assert labels == [

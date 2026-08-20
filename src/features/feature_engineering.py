@@ -3,22 +3,24 @@ Feature Engineering Pipeline
 """
 
 from __future__ import annotations
+
 import pandas as pd
+
 from src.config.config import settings
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
 SERVICE_COLUMNS = [
-        "Phone Service",
-        "Multiple Lines",
-        "Online Security",
-        "Online Backup",
-        "Device Protection",
-        "Tech Support",
-        "Streaming TV",
-        "Streaming Movies",
-    ]
+    "Phone Service",
+    "Multiple Lines",
+    "Online Security",
+    "Online Backup",
+    "Device Protection",
+    "Tech Support",
+    "Streaming TV",
+    "Streaming Movies",
+]
 
 
 def validate_dataframe(df: pd.DataFrame) -> pd.DataFrame:
@@ -32,19 +34,16 @@ def validate_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     required_columns = settings.feature_engineering.required_columns
 
     missing = [
-        column
-        for column in required_columns
-        if column not in df.columns
+        column for column in required_columns if column not in df.columns
     ]
 
     if missing:
-        raise ValueError(
-            f"Missing required columns: {sorted(missing)}"
-        )
+        raise ValueError(f"Missing required columns: {sorted(missing)}")
 
     logger.info("Dataframe validation successful.")
 
     return df
+
 
 def drop_identifier_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -54,9 +53,9 @@ def drop_identifier_columns(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Dropping identifier columns.")
 
     return df.drop(
-        columns= settings.feature_engineering.drop_columns,
-        errors= "ignore"
+        columns=settings.feature_engineering.drop_columns, errors="ignore"
     )
+
 
 def create_tenure_group(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -69,12 +68,13 @@ def create_tenure_group(df: pd.DataFrame) -> pd.DataFrame:
 
     df["Tenure Group"] = pd.cut(
         df["Tenure Months"],
-        bins = settings.feature_engineering.tenure_bins,
-        labels = settings.feature_engineering.tenure_labels,
-        include_lowest = True
+        bins=settings.feature_engineering.tenure_bins,
+        labels=settings.feature_engineering.tenure_labels,
+        include_lowest=True,
     )
 
     return df
+
 
 def create_avg_monthly_spend(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -85,17 +85,14 @@ def create_avg_monthly_spend(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    df["Avg Monthly Spend"] = (
-        df["Total Charges"]
-        / (df["Tenure Months"] + 1)
-    )
+    df["Avg Monthly Spend"] = df["Total Charges"] / (df["Tenure Months"] + 1)
 
     return df
 
+
 def create_high_value_customer(
-        df: pd.DataFrame,
-        threshold: float
-    ) -> pd.DataFrame:
+    df: pd.DataFrame, threshold: float
+) -> pd.DataFrame:
     """
     Create high-value customer indicator.
     """
@@ -104,11 +101,10 @@ def create_high_value_customer(
 
     df = df.copy()
 
-    df["High Value Customer"] = (
-        df["CLTV"] > threshold
-    ).astype(int)
+    df["High Value Customer"] = (df["CLTV"] > threshold).astype(int)
 
     return df
+
 
 def drop_location_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -118,9 +114,10 @@ def drop_location_columns(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Dropping location columns.")
 
     return df.drop(
-        columns= settings.feature_engineering.drop_location_columns,
-        errors= "ignore"
+        columns=settings.feature_engineering.drop_location_columns,
+        errors="ignore",
     )
+
 
 def create_total_services(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -132,9 +129,7 @@ def create_total_services(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
     df["Total Services"] = (
-        df[SERVICE_COLUMNS]
-        .eq("Yes")
-        .sum(axis=1)
+        (df[SERVICE_COLUMNS] == "Yes").sum(axis=1).astype(int)
     )
 
     return df
@@ -149,17 +144,15 @@ def create_monthly_contract(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    df["Monthly Contract"] = (
-        df["Contract"] == "Month-to-month"
-    ).astype(int)
+    df["Monthly Contract"] = (df["Contract"] == "Month-to-month").astype(int)
 
     return df
 
 
 def feature_engineering_pipeline(
-        df: pd.DataFrame,
-        high_value_threshold: float,
-    ) -> pd.DataFrame:
+    df: pd.DataFrame,
+    high_value_threshold: float,
+) -> pd.DataFrame:
     """
     Apply all feature engineering transformations.
     """

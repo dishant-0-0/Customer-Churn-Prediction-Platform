@@ -31,10 +31,7 @@ def test_clean_feature_name_categorical_multiple_underscores():
         "categorical__Payment Method_Bank_transfer_(automatic)",
     )
 
-    assert (
-        result
-        == "Payment Method : Bank_transfer_(automatic)"
-    )
+    assert result == "Payment Method : Bank_transfer_(automatic)"
 
 
 def test_clean_feature_name_categorical_without_value():

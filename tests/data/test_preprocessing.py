@@ -3,14 +3,17 @@ Tests for preprocessing utilities.
 """
 
 from __future__ import annotations
+
 import pandas as pd
 import pytest
 from sklearn.compose import ColumnTransformer
+
 from src.data.preprocessing import (
-    split_data,
-    get_feature_types,
     build_preprocessor,
+    get_feature_types,
+    split_data,
 )
+
 
 def test_split_data_empty_dataframe():
     """
@@ -22,6 +25,7 @@ def test_split_data_empty_dataframe():
             df=pd.DataFrame(),
             target="Churn Value",
         )
+
 
 def test_split_data_missing_target(
     sample_prediction_dataframe,
