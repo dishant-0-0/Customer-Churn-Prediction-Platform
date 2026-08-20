@@ -107,6 +107,88 @@ Unlike a traditional notebook-based ML project, this repository includes:
 
 ---
 
+## 🔍 Model Explainability
+
+The project includes SHAP explainability to understand global feature importance and model behavior.
+
+<p align="center">
+    <img src="docs/images/shap_summary.png" width="900">
+</p>
+
+<p align="center">
+<b>SHAP Summary Plot</b>
+</p>
+
+---
+
+## 📊 Feature Importance
+
+Feature importance is generated automatically after training.
+
+<p align="center">
+    <img src="docs/images/feature_importance.png" width="850">
+</p>
+
+<p align="center">
+<b>Top Features</b>
+</p>
+
+---
+
+## 📉 ROC Curve
+
+<p align="center">
+    <img src="docs/images/roc_curve.png" width="700">
+</p>
+
+---
+
+## 🎯 Confusion Matrix
+
+<p align="center">
+    <img src="docs/images/confusion_matrix.png" width="650">
+</p>
+
+---
+
+## 📈 Precision–Recall Curve
+
+<p align="center">
+    <img src="docs/images/precision_recall_curve.png" width="700">
+</p>
+
+---
+
+## 📄 Automated HTML Report
+
+A detailed HTML report is generated automatically after every training run.
+
+<p align="center">
+    <img src="docs/images/report.png" width="100%">
+</p>
+
+---
+
+## 📊 MLflow Experiment Tracking
+
+Experiments are automatically logged with parameters, metrics, models and artifacts.
+
+<p align="center">
+    <img src="docs/images/mlflow.png" width="100%">
+</p>
+
+---
+
+## 🚀 REST API
+
+The trained model is served through FastAPI.
+
+<p align="center">
+    <img src="docs/images/swagger.png" width="100%">
+</p>
+
+---
+
 # 📂 Project Structure
 
 ```text
