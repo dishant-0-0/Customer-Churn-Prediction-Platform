@@ -124,3 +124,15 @@ filterwarnings = [
     "ignore:The set_over function will be deprecated.*:PendingDeprecationWarning",
     "ignore:The set_under function will be deprecated.*:PendingDeprecationWarning",
 ]
+
+# ---------------------------------------------------
+# setuptools
+# ---------------------------------------------------
+
+[tool.setuptools]
+
+include-package-data = true
+
+[tool.setuptools.packages.find]
+
+include = ["src*"]
