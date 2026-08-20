@@ -3,8 +3,14 @@ Tests for model registry.
 """
 
 from __future__ import annotations
-from unittest.mock import MagicMock, patch
+
+from unittest.mock import patch
+
 import pytest
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from xgboost import XGBClassifier
+
 from src.models.registry import (
     MODEL_REGISTRY,
     get_model,
@@ -16,104 +22,103 @@ def test_model_registry_contains_supported_models():
     Registry should contain all supported models.
     """
 
-    assert set(MODEL_REGISTRY.keys()) == {
-        "logistic_regression",
-        "random_forest",
-        "xgboost",
+    assert MODEL_REGISTRY == {
+        "logistic_regression": LogisticRegression,
+        "random_forest": RandomForestClassifier,
+        "xgboost": XGBClassifier,
     }
 
 
 @patch("src.models.registry.settings")
-@patch("src.models.registry.MODEL_REGISTRY")
-def test_get_model_success(
-    mock_registry,
+def test_get_model_logistic_regression(
     mock_settings,
 ):
     """
-    Configured model should be created successfully.
+    Logistic Regression model should be created from configuration.
     """
 
-    model = MagicMock()
-
-    model_class = MagicMock(
-        return_value=model,
-    )
-
-    mock_registry.__contains__.return_value = True
-    mock_registry.__getitem__.return_value = model_class
-
-    mock_settings.training.model.name = "dummy_model"
-
+    mock_settings.training.model.name = "logistic_regression"
     mock_settings.training.model.params = {
-        "n_estimators": 100,
-        "max_depth": 6,
+        "random_state": 42,
     }
 
-    result = get_model()
+    model = get_model()
 
-    model_class.assert_called_once_with(
-        n_estimators=100,
-        max_depth=6,
+    assert isinstance(
+        model,
+        LogisticRegression,
     )
 
-    assert result is model
+    assert model.random_state == 42
 
 
 @patch("src.models.registry.settings")
-@patch("src.models.registry.MODEL_REGISTRY")
+def test_get_model_random_forest(
+    mock_settings,
+):
+    """
+    Random Forest model should be created from configuration.
+    """
+
+    mock_settings.training.model.name = "random_forest"
+    mock_settings.training.model.params = {
+        "n_estimators": 10,
+        "max_depth": 3,
+        "random_state": 42,
+    }
+
+    model = get_model()
+
+    assert isinstance(
+        model,
+        RandomForestClassifier,
+    )
+
+    assert model.n_estimators == 10
+    assert model.max_depth == 3
+    assert model.random_state == 42
+
+
+@patch("src.models.registry.settings")
+def test_get_model_xgboost(
+    mock_settings,
+):
+    """
+    XGBoost model should be created from configuration.
+    """
+
+    mock_settings.training.model.name = "xgboost"
+    mock_settings.training.model.params = {
+        "n_estimators": 20,
+        "max_depth": 4,
+        "learning_rate": 0.1,
+    }
+
+    model = get_model()
+
+    assert isinstance(
+        model,
+        XGBClassifier,
+    )
+
+    assert model.n_estimators == 20
+    assert model.max_depth == 4
+    assert model.learning_rate == 0.1
+
+
+@patch("src.models.registry.settings")
 def test_get_model_unknown_model(
-    mock_registry,
     mock_settings,
 ):
     """
     Unknown model names should raise ValueError.
     """
 
-    mock_registry.__contains__.return_value = False
-    mock_registry.keys.return_value = [
-        "logistic_regression",
-        "random_forest",
-    ]
-
     mock_settings.training.model.name = "unknown_model"
+    mock_settings.training.model.params = {}
 
     with pytest.raises(
         ValueError,
         match="Unknown model",
     ):
         get_model()
-
-
-@patch("src.models.registry.settings")
-@patch("src.models.registry.MODEL_REGISTRY")
-def test_get_model_passes_parameters(
-    mock_registry,
-    mock_settings,
-):
-    """
-    Constructor should receive configuration parameters.
-    """
-
-    model = MagicMock()
-
-    model_class = MagicMock(
-        return_value=model,
-    )
-
-    mock_registry.__contains__.return_value = True
-    mock_registry.__getitem__.return_value = model_class
-
-    params = {
-        "learning_rate": 0.05,
-        "max_depth": 4,
-        "n_estimators": 200,
-    }
-
-    mock_settings.training.model.name = "xgboost"
-    mock_settings.training.model.params = params
-
-    get_model()
-
-    model_class.assert_called_once_with(
-        **params,
-    )
