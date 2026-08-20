@@ -6,10 +6,14 @@ from __future__ import annotations
 import pandas as pd
 import numpy as np
 import pytest
+import json
+import joblib
+from sklearn.dummy import DummyClassifier
+from sklearn.preprocessing import StandardScaler
 from sklearn.dummy import DummyClassifier
 from sklearn.preprocessing import StandardScaler
 from pathlib import Path
-from src.persistence import save
+from src.persistence import save, load
 from unittest.mock import Mock
 from src.core import InferenceArtifacts, EvaluationResult
 
@@ -248,11 +252,11 @@ def mock_evaluation_result() -> EvaluationResult:
 
 @pytest.fixture
 def patched_artifact_dirs(
-    tmp_path: Path,
+    tmp_path,
     monkeypatch,
-) -> Path:
+):
     """
-    Patch persistence directories to use a temporary location.
+    Patch persistence directories to use temporary folders.
     """
 
     artifacts_dir = tmp_path / "artifacts"
@@ -260,6 +264,12 @@ def patched_artifact_dirs(
 
     monkeypatch.setattr(
         save,
+        "ARTIFACTS_DIR",
+        artifacts_dir,
+    )
+
+    monkeypatch.setattr(
+        load,
         "ARTIFACTS_DIR",
         artifacts_dir,
     )
@@ -286,3 +296,101 @@ def patched_artifact_dirs(
     )
 
     return artifacts_dir
+
+
+@pytest.fixture
+def create_saved_artifacts(
+    patched_artifact_dirs,
+):
+    """
+    Factory fixture that creates a complete experiment directory
+    containing all required inference artifacts.
+    """
+
+    def _create(
+        experiment_name: str,
+        feature_names: list[str] | None = None,
+        high_value_threshold: float = 5000.0,
+    ) -> tuple[str, Path]:
+
+        if feature_names is None:
+            feature_names = [
+                "A",
+                "B",
+            ]
+
+        experiment_dir = (
+            patched_artifact_dirs /
+            experiment_name
+        )
+
+        model_dir = (
+            experiment_dir /
+            "model"
+        )
+
+        model_dir.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        model = DummyClassifier(
+            strategy="most_frequent",
+        )
+
+        model.fit(
+            [[0], [1]],
+            [0, 1],
+        )
+
+        preprocessor = StandardScaler()
+
+        preprocessor.fit(
+            [[0], [1]],
+        )
+
+        joblib.dump(
+            model,
+            model_dir / "model.joblib",
+        )
+
+        joblib.dump(
+            preprocessor,
+            model_dir / "preprocessor.joblib",
+        )
+
+        with (
+            model_dir /
+            "feature_names.json"
+        ).open(
+            "w",
+            encoding="utf-8",
+        ) as file:
+
+            json.dump(
+                feature_names,
+                file,
+            )
+
+        with (
+            model_dir /
+            "metadata.json"
+        ).open(
+            "w",
+            encoding="utf-8",
+        ) as file:
+
+            json.dump(
+                {
+                    "high_value_threshold":
+                        high_value_threshold,
+                },
+                file,
+            )
+
+        return (
+            experiment_name,
+            experiment_dir,
+        )
+
+    return _create
