@@ -1,5 +1,5 @@
 # Base Image
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 # Environment Variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -17,6 +17,7 @@ RUN apt-get update \
 
 # Install Python Dependencies
 COPY requirements.txt /app/requirements.txt
+COPY pyproject.toml /app/pyproject.toml
 
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r /app/requirements.txt
@@ -24,8 +25,19 @@ RUN pip install --upgrade pip \
 # Copy Application
 COPY . /app
 
+# Install Project
+RUN pip install --no-cache-dir -e .
+
 # Expose Fast API
 EXPOSE 8000
+
+# Health Check
+HEALTHCHECK \
+    --interval=30s \
+    --timeout=5s \
+    --start-period=30s \
+    --retries=3 \
+CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')" || exit 1
 
 # Start FastAPI Port
 CMD ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", "8000"]

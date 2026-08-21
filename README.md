@@ -394,42 +394,34 @@ pytest tests --cov=src --cov-report=term-missing
 
 ---
 
-# 🔧 Installation
+# 🐳 Run with Docker
 
-Clone the repository:
+Clone the repository
 
 ```bash
 git clone https://github.com/dishant-0-0/Customer-Churn-Prediction-Platform.git
+cd Customer-Churn-Prediction-Platform
 ```
 
-Create a virtual environment:
+Build and start all services
 
 ```bash
-python -m venv venv
+docker compose up --build
 ```
 
-Activate it:
+Open
 
-Windows:
+FastAPI
 
-```bash
-venv\Scripts\activate
+```
+http://localhost:8000/docs
 ```
 
-Linux / macOS:
+MLflow
 
-```bash
-source venv/bin/activate
 ```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-pip install -e .
+http://localhost:5000
 ```
-
----
 
 # ▶ Running the Project
 
@@ -449,6 +441,18 @@ Open Swagger UI:
 
 ```text
 http://localhost:8000/docs
+```
+
+Start MLflow UI
+
+```bash
+mlflow ui
+```
+
+Open:
+
+```
+http://localhost:5000
 ```
 
 ---
